@@ -44,14 +44,15 @@ $(document).ready(function(){
 				"left":addedLeftPad
 			});
 			$(this).css({
-				"border-color":"#b8b8b8"
+				"border-color":"#b8b8b8",
+				"background-image":"linear-gradient(to bottom,#019018 0,#008916 100%)"
 			});
 			$(this).removeClass("hover-highlight");
 			$(this).removeClass("not-added");
 		} else {
 			//it is already in queue, remove it
 			//call function to remove from queue
-			
+
 			$(this).html("Add To Up Next");
 			$(this).parent(".yUN-span").css({"left":fullLeftPad});
 			$(this).css({"border-color":"#d8d8d8"});

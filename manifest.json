@@ -1,0 +1,25 @@
+{
+	"name": "Youtube Up-Next",
+	"version": "0.1",
+	"description": "adds Up-Next capabilities",
+	"content_scripts":[
+		{
+			"matches":["http://*.youtube.com/*"],
+			"all_frames":false,
+			"run_at":"document_end",
+			"js":["js/jquery-2.0.2.min.js","js/yUN.js"]
+		}
+	],
+	"background":{ "scripts": ["js/background.js"] },
+	"permissions":[
+		"tabs",
+		"http://*.youtube.com/*"
+	],
+	"page_action":{
+		"default_title": "Youtube Up-Next",
+		"default_icon":"icon.png"
+	},
+	//"options_page":"options.html",
+	"manifest_version":2,
+	"content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
+}

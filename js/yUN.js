@@ -38,7 +38,7 @@ $(document).ready(function(){
 		if($(this).hasClass("not-added")){
 			//change button text to added , potentially add remove function
 			//call function to add to playlist to queue
-			
+			getInfo(this);
 			$(this).html("Added");
 			$(this).parent(".yUN-span").css({
 				"left":addedLeftPad
@@ -88,6 +88,17 @@ $(document).ready(function(){
 	//set hover logic
 	$(".yUN-btn").hover(hoverIn, hoverOut);
 });
+
+//function to get url, id and title from video when clicked
+function getInfo(pressed){
+	var $anc =$(pressed).parent(".yUN-span").siblings("a");
+	var url = $anc.attr("href");
+	var vidTitle = $anc.children(".title").html();
+	alert(url+"\n"+vidTitle);
+
+}
+
+
 var fullLeftPad = "304px";//304px
 var addedLeftPad= "347px";
 var removeLeftPad= "338px";

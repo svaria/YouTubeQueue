@@ -19,19 +19,26 @@ function checkforYoutubeURL(tabID,changeInfo,tab){
 };
 
 function messageListener(request, sender, sendResponse){
-	//if(request.inf){
-		//if popup is requesting queue data
-	//	sendResponse(queue);
-	//}else {
-		//if yUN is sending data
+	if(!request.remove){
+		//add it in this case
 		var toEnq = new YUNVid(request.vidTitle,request.url,sender.tab.id);
 		//need to decide whether to allow multiple queues or not
 		//for now, no multiple tabs
 		queue.push(toEnq);
-	//}
+	} else {
+		//remove it in this case
+		var toRemove = new YUNVid(request.vidTitle,request.url,sender.tab.id);
+		for(var i = 0; i<queue.length;i++){
+			if(queue[i].url===toRemove.url){
+				queue.splice(i,1);
+				break;
+			}
+		}
+
+	}
 }
 
-
+//listeners
 chrome.tabs.onUpdated.addListener(checkforYoutubeURL);
 chrome.runtime.onMessage.addListener(messageListener);
 

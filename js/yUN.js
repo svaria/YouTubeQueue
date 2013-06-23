@@ -38,7 +38,9 @@ $(document).ready(function(){
 		if($(this).hasClass("not-added")){
 			//change button text to added , potentially add remove function
 			//call function to add to playlist to queue
-			getInfo(this);
+			getInfo(this,false);
+
+			//UI changes
 			$(this).html("Added");
 			$(this).parent(".yUN-span").css({
 				"left":addedLeftPad
@@ -51,7 +53,9 @@ $(document).ready(function(){
 		} else {
 			//it is already in queue, remove it
 			//call function to remove from queue
-			
+			getInfo(this,true);
+
+			//UI Changes
 			$(this).html("Add To Up Next");
 			$(this).parent(".yUN-span").css({"left":fullLeftPad});
 			$(this).css({"border-color":"#d8d8d8"});
@@ -90,19 +94,16 @@ $(document).ready(function(){
 });
 
 //function to get url, id and title from video when clicked
-function getInfo(pressed){
+function getInfo(pressed,remove){
 	var $anc =$(pressed).parent(".yUN-span").siblings("a");
 	var url = $anc.attr("href");
 	var vidTitle = $anc.children(".title").html();
 	alert(url+"\n"+vidTitle);
 	var message = {};
-	//message.inf = false;
 	message.vidTitle=vidTitle;
 	message.url=url;
-	chrome.runtime.sendMessage(message,function(){
-		alert("does this print");
-	});
-
+	message.remove = remove;
+	chrome.runtime.sendMessage(message,function(){});
 }
 
 var fullLeftPad = "304px";//304px

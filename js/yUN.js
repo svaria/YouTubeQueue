@@ -15,6 +15,10 @@ $(document).ready(function(){
 		"bottom":bottomPad
 	});
 
+	//add state listener
+	stateListener();
+
+
 	//logic for when Load more suggestions button is pressed
 	$("#watch-more-related-button").click(function(){
 		//simulate wait time for load
@@ -31,6 +35,27 @@ $(document).ready(function(){
 			$(".yUN-btn.yUN-more-suggestions").hover(hoverIn,hoverOut);
 		},500);
 	});
+
+	function stateListener(){
+		//get player object
+		var player = getYoutubePlayer();
+		console.log(player);
+
+		if(player){
+			var inter1 = setInterval(function(){
+				try{
+					var state = player.getPlayerState();
+					if(state===0){
+						//movie has ended
+						console.log("movie ended");
+						clearInterval(inter1);
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},1500);
+		}
+	}
 
 	function clickHandler(){
 		//add logic for when button clicked
@@ -104,6 +129,16 @@ function getInfo(pressed,remove){
 	message.url=url;
 	message.remove = remove;
 	chrome.runtime.sendMessage(message,function(){});
+}
+
+//function to get the video player object
+function getYoutubePlayer(){
+	var p = $("#movie_player").get();
+	if(p.length!==0){
+		return p[0];
+	} else {
+		return false;
+	}
 }
 
 var fullLeftPad = "304px";//304px

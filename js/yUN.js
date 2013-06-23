@@ -95,9 +95,15 @@ function getInfo(pressed){
 	var url = $anc.attr("href");
 	var vidTitle = $anc.children(".title").html();
 	alert(url+"\n"+vidTitle);
+	var message = {};
+	//message.inf = false;
+	message.vidTitle=vidTitle;
+	message.url=url;
+	chrome.runtime.sendMessage(message,function(){
+		alert("does this print");
+	});
 
 }
-
 
 var fullLeftPad = "304px";//304px
 var addedLeftPad= "347px";

@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	//when ready, populate popup
-	var queue = chrome.extension.getBackgroundPage().queue;
+	var queue = chrome.extension.getBackgroundPage().upNext.queue;
+	var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
 	if(queue.length!==0){
 		//at least 1 element in the queue, display it
 

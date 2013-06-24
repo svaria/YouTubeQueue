@@ -22,8 +22,8 @@ function checkforYoutubeURL(tabID,changeInfo,tab){
 };
 
 function updatePageActionInTab(activeInfo){
-		//or if the queue has videos in it
-		alert(upNext.queue.length);
+	//or if the queue has videos in it
+	alert(upNext.queue.length);
 	if(upNext.queue.length!==0){
 		chrome.pageAction.show(activeInfo.tabId);
 	}
@@ -32,23 +32,23 @@ function updatePageActionInTab(activeInfo){
 
 //handles add request
 function addRequest(request,sender){
-		//add it in this case
-		var toEnq = new YUNVid(request.vidTitle,request.url,sender.tab.id);
-		//need to decide whether to allow multiple queues or not
-		//for now, no multiple tabs
-		upNext.queue.push(toEnq);
+	//add it in this case
+	var toEnq = new YUNVid(request.vidTitle,request.url,sender.tab.id);
+	//need to decide whether to allow multiple queues or not
+	//for now, no multiple tabs
+	upNext.queue.push(toEnq);
 }
 
 //handles remove request
 function removeRequest(request,sender){
 	//remove it in this case
-		var toRemove = new YUNVid(request.vidTitle,request.url,sender.tab.id);
-		for(var i = 0; i<upNext.queue.length;i++){
-			if(upNext.queue[i].url===toRemove.url){
-				upNext.queue.splice(i,1);
-				break;
-			}
+	var toRemove = new YUNVid(request.vidTitle,request.url,sender.tab.id);
+	for(var i = 0; i<upNext.queue.length;i++){
+		if(upNext.queue[i].url===toRemove.url){
+			upNext.queue.splice(i,1);
+			break;
 		}
+	}
 }
 
 //handles redirect to next vid

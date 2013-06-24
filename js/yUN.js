@@ -36,22 +36,36 @@ $(document).ready(function(){
 		},500);
 	});
 
+
 	function stateListener(){
 		//get player object
-		var player = getYoutubePlayer();
+		var vidType = flashOrHtml();
+		var player = getYoutubePlayer(vidType);
 		console.log(player);
-
-		if(player){
-			var inter1 = setInterval(function(){
-				try{
-					var state = player.getPlayerState();
-					if(state===0){
-						//movie has ended
-						console.log("movie ended");
-						clearInterval(inter1);
+		if(vidType==="flash"){
+			if(player){
+				var inter1 = setInterval(function(){
+					try{
+						var state = player.getPlayerState();
+						if(state===0){
+							//movie has ended
+							console.log("movie ended");
+							clearInterval(inter1);
+							//logic for next page
+						}
+					} catch (error) {
+						console.log(error);
 					}
-				} catch (error) {
-					console.log(error);
+				},1500);
+			}
+		} else {
+			//html5 player
+			var inter2 = setInterval(function(){
+				if(player.ended===true){
+					//movie has ended
+					console.log("movie ended html");
+					clearInterval(inter2);
+					//logic for next page
 				}
 			},1500);
 		}
@@ -131,13 +145,35 @@ function getInfo(pressed,remove){
 	chrome.runtime.sendMessage(message,function(){});
 }
 
+function flashOrHtml(){
+	if($("#movie_player").hasClass("html5-video-player")
+		|| $("#captions").get().length!==0 
+		|| $("#www-player-css".get().length!==0
+		)){
+		return 'html';
+	} else 
+		return "flash"
+}
+
 //function to get the video player object
-function getYoutubePlayer(){
-	var p = $("#movie_player").get();
-	if(p.length!==0){
-		return p[0];
-	} else {
-		return false;
+function getYoutubePlayer(vidType){
+
+	if(vidType==="html"){
+		//html5 movie player
+		var p = $(".html5-main-video").get();
+		if(p.length!==0){
+			return p[0];
+		}else {
+			return false;
+		}
+	}else{
+		//flash way to get player
+		var p = $("#movie_player").get();
+		if(p.length!==0){
+			return p[0];
+		} else {
+			return false;
+		}
 	}
 }
 

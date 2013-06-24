@@ -15,6 +15,10 @@ $(document).ready(function(){
 		"bottom":bottomPad
 	});
 
+	//add state listener
+	stateListener();
+
+
 	//logic for when Load more suggestions button is pressed
 	$("#watch-more-related-button").click(function(){
 		//simulate wait time for load
@@ -32,27 +36,65 @@ $(document).ready(function(){
 		},500);
 	});
 
+
+	function stateListener(){
+		//get player object
+		var vidType = flashOrHtml();
+		var player = getYoutubePlayer(vidType);
+		console.log(player);
+		if(vidType==="flash"){
+			if(player){
+				var inter1 = setInterval(function(){
+					try{
+						var state = player.getPlayerState();
+						if(state===0){
+							//movie has ended
+							console.log("movie ended");
+							clearInterval(inter1);
+							//logic for next page
+							goToNext();
+							
+						}
+					} catch (error) {
+						console.log(error);
+					}
+				},1500);
+			}
+		} else {
+			//html5 player
+			var inter2 = setInterval(function(){
+				if(player.ended===true){
+					//movie has ended
+					console.log("movie ended html");
+					clearInterval(inter2);
+					//logic for next page
+					goToNext();
+				}
+			},1500);
+		}
+	}
+
 	function clickHandler(){
 		//add logic for when button clicked
 		//if it has not been added to queue then add
 		if($(this).hasClass("not-added")){
 			//change button text to added , potentially add remove function
 			//call function to add to playlist to queue
-			
+			getInfo(this,"add");
+
+			//UI changes
 			$(this).html("Added");
 			$(this).parent(".yUN-span").css({
 				"left":addedLeftPad
-			});
-			$(this).css({
-				"border-color":"#b8b8b8",
-				"background-image":"linear-gradient(to bottom,#019018 0,#008916 100%)"
 			});
 			$(this).removeClass("hover-highlight");
 			$(this).removeClass("not-added");
 		} else {
 			//it is already in queue, remove it
 			//call function to remove from queue
+			getInfo(this,"remove");
 
+			//UI Changes
 			$(this).html("Add To Up Next");
 			$(this).parent(".yUN-span").css({"left":fullLeftPad});
 			$(this).css({"border-color":"#d8d8d8"});
@@ -89,6 +131,60 @@ $(document).ready(function(){
 	//set hover logic
 	$(".yUN-btn").hover(hoverIn, hoverOut);
 });
+
+//function to redirect to next url
+function goToNext(){
+	var message = {};
+	message.requestType= "next";
+	chrome.runtime.sendMessage(message,function(){});
+}
+
+//function to get url, id and title from video when clicked
+function getInfo(pressed,requestType){
+	var $anc =$(pressed).parent(".yUN-span").siblings("a");
+	var url = $anc.attr("href");
+	var vidTitle = $anc.children(".title").html();
+	alert(url+"\n"+vidTitle);
+	var message = {};
+	message.vidTitle=vidTitle;
+	message.url=url;
+	message.requestType= requestType;
+	chrome.runtime.sendMessage(message,function(){});
+}
+
+//function to get the type of the video
+function flashOrHtml(){
+	if($("#movie_player").hasClass("html5-video-player")
+		|| $("#captions").get().length!==0 
+		|| $("#www-player-css").get().length!==0
+		){
+		return 'html';
+	} else 
+		return "flash"
+}
+
+//function to get the video player object
+//vid is either flash or html
+function getYoutubePlayer(vidType){
+	if(vidType==="html"){
+		//html5 movie player
+		var p = $(".html5-main-video").get();
+		if(p.length!==0){
+			return p[0];
+		}else {
+			return false;
+		}
+	}else{
+		//flash way to get player
+		var p = $("#movie_player").get();
+		if(p.length!==0){
+			return p[0];
+		} else {
+			return false;
+		}
+	}
+}
+
 var fullLeftPad = "304px";//304px
 var addedLeftPad= "347px";
 var removeLeftPad= "338px";

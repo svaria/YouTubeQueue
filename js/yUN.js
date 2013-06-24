@@ -145,10 +145,11 @@ function getInfo(pressed,remove){
 	chrome.runtime.sendMessage(message,function(){});
 }
 
+//function to get the type of the video
 function flashOrHtml(){
 	if($("#movie_player").hasClass("html5-video-player")
 		|| $("#captions").get().length!==0 
-		|| $("#www-player-css".get().length!==0
+		|| $("#www-player-css").get().length!==0
 		)){
 		return 'html';
 	} else 
@@ -156,8 +157,8 @@ function flashOrHtml(){
 }
 
 //function to get the video player object
+//vid is either flash or html
 function getYoutubePlayer(vidType){
-
 	if(vidType==="html"){
 		//html5 movie player
 		var p = $(".html5-main-video").get();

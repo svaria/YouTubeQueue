@@ -150,7 +150,7 @@ function flashOrHtml(){
 	if($("#movie_player").hasClass("html5-video-player")
 		|| $("#captions").get().length!==0 
 		|| $("#www-player-css").get().length!==0
-		)){
+		){
 		return 'html';
 	} else 
 		return "flash"

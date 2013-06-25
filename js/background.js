@@ -24,10 +24,9 @@ function checkforYoutubeURL(tabID,changeInfo,tab){
 function updatePageActionInTab(activeInfo){
 	//or if the queue has videos in it
 	alert(upNext.queue.length);
-	if(upNext.queue.length!==0){
-		chrome.pageAction.show(activeInfo.tabId);
-	}
-
+		//force firing update event to update page
+		//does not fire update event
+		chrome.tabs.update(activeInfo.tabId,{});
 }
 
 //handles add request
@@ -42,7 +41,9 @@ function addRequest(request,sender){
 //handles remove request
 function removeRequest(request,sender){
 	//remove it in this case
-	var toRemove = new YUNVid(request.vidTitle,request.url,sender.tab.id);
+	//tab id does not matter in this case as it is a temp variable
+	//var toRemove = new YUNVid(request.vidTitle,request.url,sender.tab.id);
+	var toRemove = new YUNVid(request.vidTitle,request.url,null);
 	for(var i = 0; i<upNext.queue.length;i++){
 		if(upNext.queue[i].url===toRemove.url){
 			upNext.queue.splice(i,1);
@@ -80,6 +81,8 @@ function messageListener(request, sender, sendResponse){
 
 //listeners
 chrome.tabs.onUpdated.addListener(checkforYoutubeURL);
+//does not work
+//chrome.tabs.onActivated.addListener(updatePageActionInTab);
 chrome.runtime.onMessage.addListener(messageListener);
 
 

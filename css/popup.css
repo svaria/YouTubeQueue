@@ -44,6 +44,10 @@ li a {
   transition: font-size 0.3s ease, background-color 0.3s ease;
 }
 
+.vid-title:hover {
+  color:#f03838;
+}
+
 .exclude {
   padding-top: 3px;
   padding-right: 2px;
@@ -53,4 +57,15 @@ li a {
 li a:hover {
   font-size: 14px;
   background: #f6f6f6;
+}
+
+.delete {
+  float:right;
+  padding-top:3px;
+  padding-right:2px;
+  display:none;
+}
+
+.delete:hover {
+  color: #f03838;
 }

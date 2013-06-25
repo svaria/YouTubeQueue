@@ -24,6 +24,9 @@ function checkforYoutubeURL(tabID,changeInfo,tab){
 	}
 	if(upNext.queue.length!==0){
 		chrome.pageAction.show(tabID);
+	}else {
+		if(tab.url.indexOf("youtube.com")==-1)
+			chrome.pageAction.hide(tabID);
 	}
 
 };

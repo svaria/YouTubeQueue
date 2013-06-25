@@ -29,37 +29,24 @@ $(document).ready(function() {
 			//alert(url);
 			var vidTitle = $(this).siblings(".vid-title").html();
 			//alert(vidTitle);
+			//remove video from queue
+			var message={};
+			message.requestType="remove";
+			message.vidTitle = vidTitle;
+			message.url = url;
+			chrome.runtime.sendMessage(message,function(){});
+			
 			if($l.hasClass("current")){
 				//handle when current video is playing
-				//remove video from queue
-				var message={};
-				message.requestType="remove";
-				message.vidTitle = vidTitle;
-				message.url = url;
-				chrome.runtime.sendMessage(message,function(){});
-
 				//go to next vid
 				var message2={};
 				message2.requestType="next";
 				chrome.runtime.sendMessage(message2,function(){});
 
-				//refresh page
-				location.reload();
-
-			} else {
-				//handle when not current vid playing
-				
-				//remove video from queue
-				var message={};
-				message.requestType="remove";
-				message.vidTitle =vidTitle;
-				message.url = url;
-				chrome.runtime.sendMessage(message,function(){});
-
-				//refresh page
-				location.reload();
-
 			}
+			//refresh page
+			location.reload();
+
 		});
 
 		//when vid title is clicked redirect to page

@@ -13,7 +13,7 @@ function YUNVid(vidTitle,url,tabID){
 
 var upNext={}
 upNext.queue=[];
-upNext.nextVid=0;
+upNext.currentVid=-1;
 
 
 
@@ -50,15 +50,14 @@ function addRequest(request,sender){
 function removeRequest(request){
 	//remove it in this case
 	//tab id does not matter in this case as it is a temp variable
-	//var toRemove = new YUNVid(request.vidTitle,request.url,sender.tab.id);
 	var toRemove = new YUNVid(request.vidTitle,request.url,null);
 	for(var i = 0; i<upNext.queue.length;i++){
 		if(upNext.queue[i].url===toRemove.url){
 			//found video to remove
 			upNext.queue.splice(i,1);
 			//if vid to be deleted is CURRENT vid or lower decrement counter to adjust for shifting in array
-			if(i<upNext.nextVid && i!==0){
-				upNext.nextVid--;
+			if(i<=upNext.currentVid && i>=0){
+				upNext.currentVid--;
 			}
 			break;
 		}
@@ -68,9 +67,9 @@ function removeRequest(request){
 //handles redirect to next vid
 function nextRequest(request){
 	//non empty queue and also not last vid in queue
-	if(upNext.queue.length>0 && upNext.nextVid!==upNext.queue.length){
-		chrome.tabs.update(upNext.queue[upNext.nextVid].tabID,{url:upNext.queue[upNext.nextVid].url});
-		upNext.nextVid++;
+	if(upNext.queue.length>0 && upNext.currentVid!==upNext.queue.length-1){
+		upNext.currentVid++;
+		chrome.tabs.update(upNext.queue[upNext.currentVid].tabID,{url:upNext.queue[upNext.currentVid].url});
 	}
 }
 

@@ -144,7 +144,7 @@ function getInfo(pressed,requestType){
 	var $anc =$(pressed).parent(".yUN-span").siblings("a");
 	var url = $anc.attr("href");
 	var vidTitle = $anc.children(".title").html();
-	alert(url+"\n"+vidTitle);
+	//alert(url+"\n"+vidTitle);
 	var message = {};
 	message.vidTitle=vidTitle;
 	message.url=url;

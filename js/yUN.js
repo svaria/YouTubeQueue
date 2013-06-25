@@ -139,7 +139,7 @@ function goToNext(){
 	chrome.runtime.sendMessage(message,function(){});
 }
 
-//function to get url, id and title from video when clicked
+//function to get url, id and title from video when clicked and add it to queue
 function getInfo(pressed,requestType){
 	var $anc =$(pressed).parent(".yUN-span").siblings("a");
 	var url = $anc.attr("href");

@@ -1,4 +1,4 @@
-isOpen();
+isYoutubeOpen();
 
 var queue = chrome.extension.getBackgroundPage().upNext.queue;
 var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
@@ -61,7 +61,7 @@ $(document).ready(function() {
 	}
 });
 
-function isOpen(){
+function isYoutubeOpen(){
 	chrome.tabs.query({},function(tabs){
 		var b = false;
 		for(var i = 0; i<tabs.length;i++){

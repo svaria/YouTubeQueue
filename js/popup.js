@@ -1,7 +1,9 @@
+isOpen();
+
+var queue = chrome.extension.getBackgroundPage().upNext.queue;
+var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
 $(document).ready(function() {
 	//when ready, populate popup
-	var queue = chrome.extension.getBackgroundPage().upNext.queue;
-	var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
 	if(queue.length!==0){
 		//at least 1 element in the queue, display it
 		//create list
@@ -52,10 +54,24 @@ $(document).ready(function() {
 		//when vid title is clicked redirect to page
 		$(".vid-title").click(function(){
 
-		})
+		});
 
 	} else {
-		//empty queue, so add p element to tell user
-		$(".add-here").append('<p class="empty">There are no elements in the queue</p>');
+		$(".add-here").append('<p class="empty">There are no elements in the queue. Add some!</p>');
 	}
 });
+
+function isOpen(){
+	chrome.tabs.query({},function(tabs){
+		var b = false;
+		for(var i = 0; i<tabs.length;i++){
+			if(tabs[i].url.indexOf("youtube.com")!==-1){
+				b= true;
+				break;
+			}
+		}
+		if(!b){
+			chrome.tabs.create({active:false,url:"http://www.youtube.com"});
+		}	
+	});
+}

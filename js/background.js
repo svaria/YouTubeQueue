@@ -17,7 +17,7 @@ upNext.currentVid=-1;
 
 
 
-function checkforYoutubeURL(tabID,changeInfo,tab){
+/*function checkforYoutubeURL(tabID,changeInfo,tab){
 	//show if on youtube
 	if(tab.url.indexOf("youtube.com")!==-1){
 		chrome.pageAction.show(tabID);
@@ -30,9 +30,9 @@ function checkforYoutubeURL(tabID,changeInfo,tab){
 			chrome.pageAction.hide(tabID);
 	}
 
-};
+};*/
 
-function updatePageActionInTab(activeInfo){
+/*function updatePageActionInTab(activeInfo){
 	//show on activation of tab
 	chrome.tabs.get(activeInfo.tabId,function(tab){
 		if(tab.url.indexOf("youtube.com")!==-1){
@@ -43,6 +43,22 @@ function updatePageActionInTab(activeInfo){
 		}
 		if(upNext.queue.length!==0){
 			chrome.pageAction.show(tab.id);
+		}
+	});
+}*/
+
+function actionClicked(tab){
+	chrome.windows.getCurrent({populate:true},function(win){
+		var t = win.tabs;
+		var b = false;
+		for(var i = 0; i<t.length;i++){
+			b= b || (t[i].url.indexOf("youtube.com")!==-1);
+		}
+		alert(b);
+		if(b){
+			chrome.browserAction.setPopup({'popup':'popup.html'});
+		} else {
+			chrome.browserAction.setPopup({'popup':'popup-no-yt.html'});
 		}
 	});
 }
@@ -103,11 +119,11 @@ function messageListener(request, sender, sendResponse){
 }
 
 //listeners
-chrome.tabs.onUpdated.addListener(checkforYoutubeURL);
+/*chrome.tabs.onUpdated.addListener(checkforYoutubeURL);
 //does not work
-		chrome.tabs.onActivated.addListener(updatePageActionInTab);
+		chrome.tabs.onActivated.addListener(updatePageActionInTab);*/
 
 chrome.runtime.onMessage.addListener(messageListener);
-
+//chrome.browserAction.onClicked.addListener(actionClicked);
 
 

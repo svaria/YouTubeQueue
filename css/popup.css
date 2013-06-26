@@ -2,6 +2,11 @@ body {
   min-width: 500px;
 }
 
+.empty {
+  font: 12px/1.5 Helvetica,Verdana, sans-serif;
+  color:#808080;
+}
+
 div {
   width: 400px;
 }

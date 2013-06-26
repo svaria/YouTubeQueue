@@ -21,22 +21,30 @@ function checkforYoutubeURL(tabID,changeInfo,tab){
 	//show if on youtube
 	if(tab.url.indexOf("youtube.com")!==-1){
 		chrome.pageAction.show(tabID);
+
 	}
 	if(upNext.queue.length!==0){
 		chrome.pageAction.show(tabID);
 	}else {
-		if(tab.url.indexOf("youtube.com")==-1)
+		if(tab.url.indexOf("youtube.com")===-1)
 			chrome.pageAction.hide(tabID);
 	}
 
 };
 
 function updatePageActionInTab(activeInfo){
-	//or if the queue has videos in it
-	alert(upNext.queue.length);
-		//force firing update event to update page
-		//does not fire update event
-		chrome.tabs.update(activeInfo.tabId,{});
+	//show on activation of tab
+	chrome.tabs.get(activeInfo.tabId,function(tab){
+		if(tab.url.indexOf("youtube.com")!==-1){
+			chrome.pageAction.show(tab.id);
+		} else {
+			if(upNext.queue.length===0)
+				chrome.pageAction.hide(tab.id);
+		}
+		if(upNext.queue.length!==0){
+			chrome.pageAction.show(tab.id);
+		}
+	});
 }
 
 //handles add request
@@ -97,7 +105,8 @@ function messageListener(request, sender, sendResponse){
 //listeners
 chrome.tabs.onUpdated.addListener(checkforYoutubeURL);
 //does not work
-//chrome.tabs.onActivated.addListener(updatePageActionInTab);
+		chrome.tabs.onActivated.addListener(updatePageActionInTab);
+
 chrome.runtime.onMessage.addListener(messageListener);
 
 

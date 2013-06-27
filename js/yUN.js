@@ -3,9 +3,91 @@ $(document).ready(function(){
 	$("head").append('<style id="yUN-btn-css" type="text/css">.normal-btn{font-size:10px;color:#888;padding:0 3px;height:18px;border-color:#d8d8d8;-webkit-border-radius: 2px;border-radius:2px;border-width:1px;border-style:solid;font-weight:bold;white-space:nowrap;word-wrap: normal;vertical-align: middle;cursor: pointer;font-family:arial,sans-serif;margin:0;background-image:linear-gradient(to bottom,#fff 0,#fbfbfb 100%);}</style>');
 	$("head").append('<style id="yUN-highlight" type="text/css">.hover-highlight{-webkit-box-shadow:#999 0px 0px 3px;background:#F3F3F3 -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#EBEBEB));background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#EBEBEB));border-color:#999;outline:0px;}</style>');
 	$("head").append('<style id="yUN-highlight-remove" type="text/css">.hover-highlight-remove{background:#ad0000;color:white;border-color:black;}</style>');
+	$("head").append('<style type="text/css">.yUN-span {position:absolute;left:'+fullLeftPad+';bottom:'+bottomPad+';}</style>');
+
+	chrome.runtime.sendMessage({requestType:"queue"}, function(resp){
+		var queue =resp.queue;
+		
+		//make hash table key:url value:vidTitle
+		var queueURLS = {};
+		queue.forEach(function(obj){
+			queueURLS[obj.url]=obj;
+		});
+
+		//get info about all vids
+		var urlsToCheck = getInfo(true);
+		var notInQueue = urlsToCheck.filter(function(obj2){
+			return !(obj2.url in queueURLS);
+		});
+		var inQueue = urlsToCheck.filter(function(obj3){
+			return (obj3.url in queueURLS);
+		});
+
+		//addbutton to only those which are true videos and are not in the queue
+		for(var i=0;i<notInQueue.length;i++){
+			notInQueue[i].$a.parent(".video-list-item.related-list-item")
+						.append('<span class="yUN-span"><button class="yUN-btn not-added normal-btn">Add To Up Next</button></span>');
+		}
+
+		//show added button to those already in the queue
+		for(var i=0;i<inQueue.length;i++){
+			inQueue[i].$a.parent(".video-list-item.related-list-item")
+						.append('<span class="yUN-span"><button class="yUN-btn normal-btn">Added</button></span>');
+			//adjust css of parent span
+			inQueue[i].$a.parent(".video-list-item.related-list-item").children(".yUN-span").css({"left":addedLeftPad});		
+		}
+
+
+		$("#watch-more-related-button").click(function(){
+		//simulate wait time for load
+		setTimeout(function(){
+			var extraUrlsToCheck=getInfo(false);
+			var notInQueue = extraUrlsToCheck.filter(function(obj2){
+				return !(obj2.url in queueURLS);
+			});
+			var inQueue = extraUrlsToCheck.filter(function(obj3){
+				return (obj3.url in queueURLS);
+			});
+
+		console.log(notInQueue);
+
+			//addbutton to only those which are true videos and are not in the queue
+			for(var i=0;i<notInQueue.length;i++){
+				notInQueue[i].$a.parent(".video-list-item.related-list-item")
+							.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
+			}
+
+			//show added button to those already in the queue
+			for(var i=0;i<inQueue.length;i++){
+				inQueue[i].$a.parent(".video-list-item.related-list-item")
+							.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn normal-btn yUN-more-suggestions">Added</button></span>');
+				//adjust css of parent span
+				inQueue[i].$a.parent(".video-list-item.related-list-item").children(".yUN-span").css({"left":addedLeftPad});		
+			}
+
+			//$(".related-list-item:not(:has(.yUN-span))").append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
+
+			$(".yUN-span.yUN-more-suggestions").css({
+				"position":"absolute",
+				"left":fullLeftPad,
+				"bottom":bottomPad
+			});
+			//reactivate handlers for these buttons only
+			$(".yUN-btn.yUN-more-suggestions").click(clickHandler);
+			$(".yUN-btn.yUN-more-suggestions").hover(hoverIn,hoverOut);
+		},1000);
+	});
+
+
+		//set click logic
+		$(".yUN-btn").click(clickHandler);
+		//set hover logic
+		$(".yUN-btn").hover(hoverIn, hoverOut);	
+	});
+
 
 	//addbutton to only those which are true videos
-	$(".related-video").parent(".video-list-item.related-list-item")
+/*	$(".related-video").parent(".video-list-item.related-list-item")
 						.append('<span class="yUN-span"><button class="yUN-btn not-added normal-btn">Add To Up Next</button></span>');
 
 	//add initial css to span
@@ -14,27 +96,13 @@ $(document).ready(function(){
 		"left":fullLeftPad,
 		"bottom":bottomPad
 	});
-
+*/
 	//add state listener
 	stateListener();
 
 
 	//logic for when Load more suggestions button is pressed
-	$("#watch-more-related-button").click(function(){
-		//simulate wait time for load
-		setTimeout(function(){
-			$(".related-list-item:not(:has(.yUN-span))").append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
 
-			$(".yUN-span.yUN-more-suggestions").css({
-				"position":"absolute",
-				"left":fullLeftPad,
-				"bottom":bottomPad
-			});
-			//reactivate handlers
-			$(".yUN-btn.yUN-more-suggestions").click(clickHandler);
-			$(".yUN-btn.yUN-more-suggestions").hover(hoverIn,hoverOut);
-		},500);
-	});
 
 
 	function stateListener(){
@@ -80,7 +148,7 @@ $(document).ready(function(){
 		if($(this).hasClass("not-added")){
 			//change button text to added , potentially add remove function
 			//call function to add to playlist to queue
-			getInfo(this,"add");
+			sendAddRemoveRequest(this,"add");
 
 			//UI changes
 			$(this).html("Added");
@@ -92,7 +160,7 @@ $(document).ready(function(){
 		} else {
 			//it is already in queue, remove it
 			//call function to remove from queue
-			getInfo(this,"remove");
+			sendAddRemoveRequest(this,"remove");
 
 			//UI Changes
 			$(this).html("Add To Up Next");
@@ -126,11 +194,31 @@ $(document).ready(function(){
 		}
 	}
 
-	//set click logic
-	$(".yUN-btn").click(clickHandler);
-	//set hover logic
-	$(".yUN-btn").hover(hoverIn, hoverOut);
+
 });
+
+//function messageListener(request, sender, sendResponse){}
+
+//get intial urls
+function getInfo(i){
+	if(i){
+		var $anchs = $('.related-video.yt-uix-contextlink');
+	}else{
+		var $anchs = $('#watch-more-related').find('.related-video.yt-uix-contextlink');
+	}
+	var urlArr = [];
+	$anchs.each(function(index){
+		//title irrelevant
+		var temp = {}
+		temp.url = "http://www.youtube.com"+$(this).attr("href");
+		temp.$a = $(this);
+		urlArr.push(temp);
+	});
+	return urlArr;
+}
+
+function getExpandedInfo(){
+}
 
 //function to redirect to next url
 function goToNext(){
@@ -140,7 +228,7 @@ function goToNext(){
 }
 
 //function to get url, id and title from video when clicked and add it to queue
-function getInfo(pressed,requestType){
+function sendAddRemoveRequest(pressed,requestType){
 	var $anc =$(pressed).parent(".yUN-span").siblings("a");
 	var url = $anc.attr("href");
 	var vidTitle = $anc.children(".title").html();

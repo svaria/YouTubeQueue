@@ -45,7 +45,7 @@ upNext.currentVid=-1;
 			chrome.pageAction.show(tab.id);
 		}
 	});
-}*/
+}
 
 function actionClicked(tab){
 	chrome.windows.getCurrent({populate:true},function(win){
@@ -61,7 +61,7 @@ function actionClicked(tab){
 			chrome.browserAction.setPopup({'popup':'popup-no-yt.html'});
 		}
 	});
-}
+}*/
 
 //handles add request
 function addRequest(request,sender){
@@ -100,6 +100,10 @@ function nextRequest(request){
 	}
 }
 
+function queueRequest(request,sender,sendResponse){
+	sendResponse({queue:upNext.queue});
+}
+
 //appropriately handles each request
 function messageListener(request, sender, sendResponse){
 	switch(request.requestType){
@@ -111,6 +115,9 @@ function messageListener(request, sender, sendResponse){
 			break;
 		case 'next':
 			nextRequest(request);
+			break;
+		case 'queue':
+			queueRequest(request,sender,sendResponse);
 			break;
 		default:
 			alert("error");

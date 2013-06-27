@@ -10,11 +10,22 @@ $(document).ready(function() {
 		$(".add-here").append('<ul class="queue"></ul>');
 		//add elements from queue
 		for(var i =0; i<queue.length;i++){
-			//figure out what to actually add, for now just title
+			//order: meta, title, delete, (play)
+			var titleSpan = '<span class="vid-title">'+queue[i].vidTitle+'</span>';
+			var currentTitleSpan = '<span>'+queue[i].vidTitle+'</span>';
+			var deleteIconSpan = '</span><span class="delete"><i class="icon-remove"></i></span>';
+			var playIconSpan = '<span class="exclude"><i class="icon-play"></i></span>';
+
+			var metaTabId = '<meta name="tabID" content="'+queue[i].tabID+'">';
+			var metaIndex = '<meta name="index" content="'+i+'">';
+			var meta  = metaTabId+metaIndex;
+
 			if(i===currentVid){
-				$("ul").append('<li class="enqueued current"><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
+				//$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
+				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+playIconSpan+'</a></li>');
 			}else{
-				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'"><span class="vid-title">'+queue[i].vidTitle+'</span><span class="delete"><i class="icon-remove"></i></span></a></li>');
+				//$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+'<span class="vid-title">'+queue[i].vidTitle+'</span><span class="delete"><i class="icon-remove"></i></span></a></li>');
+				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+deleteIconSpan+'</a></li>');
 			}
 		}
 
@@ -28,14 +39,14 @@ $(document).ready(function() {
 		$(".delete").click(function(){
 			$l = $(this).parents(".enqueued");
 			var url = $(this).parents("a").attr('href');
-			//alert(url);
 			var vidTitle = $(this).siblings(".vid-title").html();
-			//alert(vidTitle);
+			var tabID = $(this).siblings("meta[name=tabID]").attr("content");
 			//remove video from queue
 			var message={};
 			message.requestType="remove";
 			message.vidTitle = vidTitle;
 			message.url = url;
+			message.tabID= tabID;
 			chrome.runtime.sendMessage(message,function(){});
 			
 			if($l.hasClass("current")){
@@ -53,7 +64,7 @@ $(document).ready(function() {
 
 		//when vid title is clicked redirect to page
 		$(".vid-title").click(function(){
-
+			var tabID;
 		});
 
 	} else {
@@ -71,7 +82,7 @@ function isYoutubeOpen(){
 			}
 		}
 		if(!b){
-			chrome.tabs.create({active:false,url:"http://www.youtube.com"});
+			chrome.tabs.create({active:true,url:"http://www.youtube.com"});
 		}	
 	});
 }

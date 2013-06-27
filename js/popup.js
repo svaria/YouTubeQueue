@@ -16,9 +16,9 @@ $(document).ready(function() {
 			var deleteIconSpan = '</span><span class="delete"><i class="icon-remove"></i></span>';
 			var playIconSpan = '<span class="exclude"><i class="icon-play"></i></span>';
 
-			var metaTabId = '<meta name="tabID" content="'+queue[i].tabID+'">';
+			//var metaTabId = '<meta name="tabID" content="'+queue[i].tabID+'">';
 			var metaIndex = '<meta name="index" content="'+i+'">';
-			var meta  = metaTabId+metaIndex;
+			var meta  = metaIndex;
 
 			if(i===currentVid){
 				//$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
@@ -46,7 +46,7 @@ $(document).ready(function() {
 			message.requestType="remove";
 			message.vidTitle = vidTitle;
 			message.url = url;
-			message.tabID= tabID;
+			//message.tabID= tabID;
 			chrome.runtime.sendMessage(message,function(){});
 			
 			if($l.hasClass("current")){
@@ -66,7 +66,7 @@ $(document).ready(function() {
 		$(".vid-title").click(function(){
 			var message={};
 			message.requestType="redirect";
-			message.tabID= parseInt($(this).siblings("meta[name=tabID]").attr("content"));
+			//message.tabID= parseInt($(this).siblings("meta[name=tabID]").attr("content"));
 			message.vidIndex= parseInt($(this).siblings("meta[name=index]").attr("content"));
 			message.url = $(this).parent('a').attr('href');
 			chrome.runtime.sendMessage(message, function(response){location.reload()});

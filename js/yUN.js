@@ -40,44 +40,41 @@ $(document).ready(function(){
 
 		$("#watch-more-related-button").click(function(){
 		//simulate wait time for load
-		setTimeout(function(){
-			var extraUrlsToCheck=getInfo(false);
-			var notInQueue = extraUrlsToCheck.filter(function(obj2){
-				return !(obj2.url in queueURLS);
-			});
-			var inQueue = extraUrlsToCheck.filter(function(obj3){
-				return (obj3.url in queueURLS);
-			});
+			setTimeout(function(){
+				var extraUrlsToCheck=getInfo(false);
+				var notInQueue = extraUrlsToCheck.filter(function(obj2){
+					return !(obj2.url in queueURLS);
+				});
+				var inQueue = extraUrlsToCheck.filter(function(obj3){
+					return (obj3.url in queueURLS);
+				});
 
-		console.log(notInQueue);
+				//addbutton to only those which are true videos and are not in the queue
+				for(var i=0;i<notInQueue.length;i++){
+					notInQueue[i].$a.parent(".video-list-item.related-list-item")
+								.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
+				}
 
-			//addbutton to only those which are true videos and are not in the queue
-			for(var i=0;i<notInQueue.length;i++){
-				notInQueue[i].$a.parent(".video-list-item.related-list-item")
-							.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
-			}
+				//show added button to those already in the queue
+				for(var i=0;i<inQueue.length;i++){
+					inQueue[i].$a.parent(".video-list-item.related-list-item")
+								.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn normal-btn yUN-more-suggestions">Added</button></span>');
+					//adjust css of parent span
+					inQueue[i].$a.parent(".video-list-item.related-list-item").children(".yUN-span").css({"left":addedLeftPad});		
+				}
 
-			//show added button to those already in the queue
-			for(var i=0;i<inQueue.length;i++){
-				inQueue[i].$a.parent(".video-list-item.related-list-item")
-							.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn normal-btn yUN-more-suggestions">Added</button></span>');
-				//adjust css of parent span
-				inQueue[i].$a.parent(".video-list-item.related-list-item").children(".yUN-span").css({"left":addedLeftPad});		
-			}
+				//$(".related-list-item:not(:has(.yUN-span))").append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
 
-			//$(".related-list-item:not(:has(.yUN-span))").append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
-
-			$(".yUN-span.yUN-more-suggestions").css({
-				"position":"absolute",
-				"left":fullLeftPad,
-				"bottom":bottomPad
-			});
-			//reactivate handlers for these buttons only
-			$(".yUN-btn.yUN-more-suggestions").click(clickHandler);
-			$(".yUN-btn.yUN-more-suggestions").hover(hoverIn,hoverOut);
-		},1000);
-	});
-
+				$(".yUN-span.yUN-more-suggestions").css({
+					"position":"absolute",
+					"left":fullLeftPad,
+					"bottom":bottomPad
+				});
+				//reactivate handlers for these buttons only
+				$(".yUN-btn.yUN-more-suggestions").click(clickHandler);
+				$(".yUN-btn.yUN-more-suggestions").hover(hoverIn,hoverOut);
+			},1000);
+		});
 
 		//set click logic
 		$(".yUN-btn").click(clickHandler);
@@ -85,25 +82,8 @@ $(document).ready(function(){
 		$(".yUN-btn").hover(hoverIn, hoverOut);	
 	});
 
-
-	//addbutton to only those which are true videos
-/*	$(".related-video").parent(".video-list-item.related-list-item")
-						.append('<span class="yUN-span"><button class="yUN-btn not-added normal-btn">Add To Up Next</button></span>');
-
-	//add initial css to span
-	$(".yUN-span").css({
-		"position":"absolute",
-		"left":fullLeftPad,
-		"bottom":bottomPad
-	});
-*/
 	//add state listener
 	stateListener();
-
-
-	//logic for when Load more suggestions button is pressed
-
-
 
 	function stateListener(){
 		//get player object
@@ -200,16 +180,18 @@ $(document).ready(function(){
 //function messageListener(request, sender, sendResponse){}
 
 //get intial urls
-function getInfo(i){
-	if(i){
+function getInfo(flag){
+	if(flag){
+		//normal anchors
 		var $anchs = $('.related-video.yt-uix-contextlink');
 	}else{
+		//if watch more related pressed
 		var $anchs = $('#watch-more-related').find('.related-video.yt-uix-contextlink');
 	}
 	var urlArr = [];
 	$anchs.each(function(index){
 		//title irrelevant
-		var temp = {}
+		var temp = {};
 		temp.url = "http://www.youtube.com"+$(this).attr("href");
 		temp.$a = $(this);
 		urlArr.push(temp);

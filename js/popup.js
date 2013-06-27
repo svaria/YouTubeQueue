@@ -1,7 +1,7 @@
-isYoutubeOpen();
 
 var queue = chrome.extension.getBackgroundPage().upNext.queue;
 var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
+isYoutubeOpen();
 $(document).ready(function() {
 	//when ready, populate popup
 	if(queue.length!==0){
@@ -64,7 +64,12 @@ $(document).ready(function() {
 
 		//when vid title is clicked redirect to page
 		$(".vid-title").click(function(){
-			var tabID;
+			var message={};
+			message.requestType="redirect";
+			message.tabID= parseInt($(this).siblings("meta[name=tabID]").attr("content"));
+			message.vidIndex= parseInt($(this).siblings("meta[name=index]").attr("content"));
+			message.url = $(this).parent('a').attr('href');
+			chrome.runtime.sendMessage(message, function(response){location.reload()});
 		});
 
 	} else {
@@ -81,7 +86,7 @@ function isYoutubeOpen(){
 				break;
 			}
 		}
-		if(!b){
+		if(!b && queue.length===0){
 			chrome.tabs.create({active:true,url:"http://www.youtube.com"});
 		}	
 	});

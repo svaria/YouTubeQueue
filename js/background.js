@@ -1,4 +1,4 @@
-function YUNVid(vidTitle,url,tabID){
+function YUNVid(vidTitle,url){
 	this.vidTitle=vidTitle;
 	var initURL = function(){
 		if(url.indexOf("youtube.com")>-1){
@@ -8,10 +8,10 @@ function YUNVid(vidTitle,url,tabID){
 		}
 	}
 	this.url  = initURL();
-	this.tabID=tabID;
 }
 
 var upNext={}
+upNext.tabID=null;
 upNext.queue=[];
 upNext.currentVid=-1;
 
@@ -63,10 +63,28 @@ function actionClicked(tab){
 	});
 }*/
 
+function youtubeTabExited(tabId, removeInfo){
+	if(upNext.queue.length!==0 && upNext.tabID===tabId){
+		//youtube tab was closed, scan for another youtube and make that the primary, or set to null if no tab
+		upNext.tabID=null;
+		upNext.currentVid=-1;
+		for(var i = 0;i<upNext.queue.length;i++){
+			upNext.queue[i].tabID=null;
+		}
+	}
+}
+
 //handles add request
 function addRequest(request,sender){
 	//add it in this case
-	var toEnq = new YUNVid(request.vidTitle,request.url,sender.tab.id);
+	var toEnq;
+	if(upNext.queue.length===0 ||upNext.tabID===null){
+		//either no vids or old vid tab closed
+		toEnq = new YUNVid(request.vidTitle,request.url);
+		upNext.tabID=sender.tab.id;
+	} else {
+		toEnq = new YUNVid(request.vidTitle,request.url);
+	}
 	//need to decide whether to allow multiple queues or not
 	//for now, no multiple tabs
 	upNext.queue.push(toEnq);
@@ -77,7 +95,7 @@ function addRequest(request,sender){
 function removeRequest(request){
 	//remove it in this case
 	//tab id does not matter in this case as it is a temp variable
-	var toRemove = new YUNVid(request.vidTitle,request.url,null);
+	var toRemove = new YUNVid(request.vidTitle,request.url);
 	for(var i = 0; i<upNext.queue.length;i++){
 		if(upNext.queue[i].url===toRemove.url){
 			//found video to remove
@@ -96,11 +114,25 @@ function nextRequest(request){
 	//non empty queue and also not last vid in queue
 	if(upNext.queue.length>0 && upNext.currentVid!==upNext.queue.length-1){
 		upNext.currentVid++;
-		chrome.tabs.update(upNext.queue[upNext.currentVid].tabID,{url:upNext.queue[upNext.currentVid].url});
+		chrome.tabs.update(upNext.tabID,{url:upNext.queue[upNext.currentVid].url});
 	}
 }
 
-function queueRequest(request,sender,sendResponse){
+function redirectRequest(request,sendResponse){
+	if(upNext.tabID!==null){
+		//tab still is open
+		chrome.tabs.update(upNext.tabID,{url:request.url,active:false});
+	} else {
+		//tab was closed
+		chrome.tabs.create({url:request.url,active:false}, function(tab){
+			//update tabID with above callback
+			upNext.tabID=tab.id;
+		});
+	}
+	upNext.currentVid=request.vidIndex;
+}
+
+function queueRequest(sendResponse){
 	sendResponse({queue:upNext.queue});
 }
 
@@ -116,8 +148,10 @@ function messageListener(request, sender, sendResponse){
 		case 'next':
 			nextRequest(request);
 			break;
+		case 'redirect':
+			redirectRequest(request,sendResponse);
 		case 'queue':
-			queueRequest(request,sender,sendResponse);
+			queueRequest(sendResponse);
 			break;
 		default:
 			alert("error");
@@ -132,5 +166,5 @@ function messageListener(request, sender, sendResponse){
 
 chrome.runtime.onMessage.addListener(messageListener);
 //chrome.browserAction.onClicked.addListener(actionClicked);
-
+chrome.tabs.onRemoved.addListener(youtubeTabExited);
 

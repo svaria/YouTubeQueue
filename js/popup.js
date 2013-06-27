@@ -6,6 +6,8 @@ $(document).ready(function() {
 	//when ready, populate popup
 	if(queue.length!==0){
 		//at least 1 element in the queue, display it
+		
+
 		//create list
 		$(".add-here").append('<ul class="queue"></ul>');
 		//add elements from queue
@@ -47,14 +49,14 @@ $(document).ready(function() {
 			message.vidTitle = vidTitle;
 			message.url = url;
 			//message.tabID= tabID;
-			chrome.runtime.sendMessage(message,function(){});
+			chrome.runtime.sendMessage(message);
 			
 			if($l.hasClass("current")){
 				//handle when current video is playing
 				//go to next vid
 				var message2={};
 				message2.requestType="next";
-				chrome.runtime.sendMessage(message2,function(){});
+				chrome.runtime.sendMessage(message2);
 
 			}
 			//refresh page

@@ -74,7 +74,14 @@ $(document).ready(function() {
 			chrome.runtime.sendMessage(message, function(response){location.reload()});
 		});
 
+		$("#clear-button").click(function(){
+			chrome.extension.getBackgroundPage().upNext.queue=[];
+			chrome.extension.getBackgroundPage().upNext.currentVid=-1;
+			location.reload();
+		});
+
 	} else {
+		$("#clear-button").hide();
 		$(".add-here").append('<p class="empty">There are no elements in the queue. Add some!</p>');
 	}
 });

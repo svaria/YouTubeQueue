@@ -68,9 +68,6 @@ function youtubeTabExited(tabId, removeInfo){
 		//youtube tab was closed, scan for another youtube and make that the primary, or set to null if no tab
 		upNext.tabID=null;
 		upNext.currentVid=-1;
-		for(var i = 0;i<upNext.queue.length;i++){
-			upNext.queue[i].tabID=null;
-		}
 	}
 }
 

@@ -6,7 +6,6 @@ $(document).ready(function() {
 	//when ready, populate popup
 	if(queue.length!==0){
 		//at least 1 element in the queue, display it
-		
 
 		//create list
 		$(".add-here").append('<ul class="queue"></ul>');
@@ -42,7 +41,7 @@ $(document).ready(function() {
 			$l = $(this).parents(".enqueued");
 			var url = $(this).parents("a").attr('href');
 			var vidTitle = $(this).siblings(".vid-title").html();
-			var tabID = $(this).siblings("meta[name=tabID]").attr("content");
+			//var tabID = $(this).siblings("meta[name=tabID]").attr("content");
 			//remove video from queue
 			var message={};
 			message.requestType="remove";
@@ -59,9 +58,12 @@ $(document).ready(function() {
 				chrome.runtime.sendMessage(message2);
 
 			}
+
+			//fix removals on page
+
+
 			//refresh page
 			location.reload();
-
 		});
 
 		//when vid title is clicked redirect to page

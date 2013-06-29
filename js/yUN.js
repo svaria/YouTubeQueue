@@ -8,7 +8,7 @@ $(document).ready(function(){
 	chrome.runtime.sendMessage({requestType:"queue"}, function(resp){
 		var queue =resp.queue;
 		
-		//make hash table key:url value:vidTitle
+		//make hash table key:url value:object
 		var queueURLS = {};
 		queue.forEach(function(obj){
 			queueURLS[obj.url]=obj;
@@ -100,8 +100,7 @@ $(document).ready(function(){
 							console.log("movie ended");
 							clearInterval(inter1);
 							//logic for next page
-							goToNext();
-							
+							goToNext();		
 						}
 					} catch (error) {
 						console.log(error);

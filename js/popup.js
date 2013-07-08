@@ -2,7 +2,7 @@
 var queue = chrome.extension.getBackgroundPage().upNext.queue;
 var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
 var tabID= chrome.extension.getBackgroundPage().upNext.tabID;
-isYoutubeOpen();
+//isYoutubeOpen();
 $(document).ready(function() {
 	//when ready, populate popup
 	if(queue.length!==0){
@@ -99,7 +99,11 @@ $(document).ready(function() {
 
 	} else {
 		$("#clear-button").hide();
-		$(".add-here").append('<p class="empty">There are no elements in the queue. Add some!</p>');
+		$(".add-here").append('<p class="empty">There are no elements in the queue. Go to <a id="youtube-url">YouTube</a> and add some!</p>');
+
+		$("#youtube-url").click(function(){
+			chrome.tabs.create({active:true,url:"http://www.youtube.com"});
+		});
 	}
 });
 

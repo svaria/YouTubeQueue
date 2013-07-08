@@ -7,10 +7,14 @@ body {
   color:#808080;
 }
 
-/*div {
-  width: 400px;
-}*/
+#youtube-url {
+  color:#06c;
+}
  
+#youtube-url:hover {
+  cursor: pointer;
+  color:#f03838;
+}
 
 
 #clear-button {

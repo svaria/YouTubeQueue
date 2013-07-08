@@ -1,5 +1,6 @@
 body {
   min-width: 500px;
+  background: #fAfAfA;
 }
 
 .empty {
@@ -51,10 +52,10 @@ body {
   float: right;
 }
  
-li a:hover {
+/*li a:hover {
   font-size: 14px;
   background: #f6f6f6;
-}
+}*/
 
 .delete {
   float:right;
@@ -77,10 +78,73 @@ li a:hover {
 
 
 /*NEW CSS LIST*/
+h2 {
+  font: 400 18px/1.5 Helvetica, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100;
+}
 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li, li:before {
+  transition: all .4s;
+}
+div {
+  max-width: 500px;
+}
+div:hover li {
+  opacity: .4;
+}
+li {
+  position: relative;
+  display: block;
+  max-width: 500px;
+  padding: 10px 20px 10px 15px;
+  box-sizing: border-box;
+  color: #777;
+  background: #fAfAfA;
+  text-decoration: none;
+  font-family: "Open Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 12px;
+  word-wrap:break-word
+}
+li:before {
+  content: "";
+  position: absolute;
+  left:0; bottom:0; top:0;
+  width: 10px;
+  background: #7F8C9A;
+}
+li:nth-child(even):before {
+  background: #34495E;
+}
+li + li {
+  border-top: 2px solid #ededed;
+}
+div li:hover,
+div li:focus {
+  opacity: 1;
+  padding-left: 25px;
+}
+div li:hover:before,
+div li:focus:before {
+  width: 20px;
+}
+
+li a {
+  text-decoration: none;
+  font-family: "Open Sans", "Segoe UI", Arial, sans-serif;
+  color: #777;
+}
 
 
 /*OLD CSS LIST*/
+/*
 h2 {
   font: 400 18px/1.5 Helvetica, Verdana, sans-serif;
   margin: 0;
@@ -117,4 +181,4 @@ li a {
   -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
   transition: font-size 0.3s ease, background-color 0.3s ease;
 }
-
+*/

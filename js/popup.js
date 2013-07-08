@@ -1,6 +1,7 @@
 
 var queue = chrome.extension.getBackgroundPage().upNext.queue;
 var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
+var tabID= chrome.extension.getBackgroundPage().upNext.tabID;
 isYoutubeOpen();
 $(document).ready(function() {
 	//when ready, populate popup
@@ -15,7 +16,8 @@ $(document).ready(function() {
 			var titleSpan = '<span class="vid-title">'+queue[i].vidTitle+'</span>';
 			var currentTitleSpan = '<span>'+queue[i].vidTitle+'</span>';
 			var deleteIconSpan = '</span><span class="delete"><i class="icon-remove"></i></span>';
-			var playIconSpan = '<span class="exclude"><i class="icon-play"></i></span>';
+			//initialize loading to give time to calculate
+			var statusIconSpan = '<span class="exclude" id="status-icon"><i class="icon-spinner icon-spin" id="insert-icon"></i></span>';
 
 			//var metaTabId = '<meta name="tabID" content="'+queue[i].tabID+'">';
 			var metaIndex = '<meta name="index" content="'+i+'">';
@@ -23,12 +25,15 @@ $(document).ready(function() {
 
 			if(i===currentVid){
 				//$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
-				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+playIconSpan+'</a></li>');
+				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+statusIconSpan+'</a></li>');
 			}else{
 				//$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+'<span class="vid-title">'+queue[i].vidTitle+'</span><span class="delete"><i class="icon-remove"></i></span></a></li>');
 				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+deleteIconSpan+'</a></li>');
 			}
 		}
+		
+		setCorrectIcon();
+
 
 		//in addition to css changes, also add capability to remove link
 		$(".enqueued").hover(function(){
@@ -59,11 +64,20 @@ $(document).ready(function() {
 
 			}
 
-			//fix removals on page
+			//TODO - fix removals on page
 
 
 			//refresh page
 			location.reload();
+		});
+
+		//current video status icon clicked-> toggle status of video
+		$("#status-icon").click(function(){
+			//tabID is non null since status icon was clicked
+			//pause/play video and change icon
+			var message={};
+			message.requestType="toggle";
+			chrome.tabs.sendMessage(tabID,message);
 		});
 
 		//when vid title is clicked redirect to page
@@ -79,6 +93,7 @@ $(document).ready(function() {
 		$("#clear-button").click(function(){
 			chrome.extension.getBackgroundPage().upNext.queue=[];
 			chrome.extension.getBackgroundPage().upNext.currentVid=-1;
+			//TODO - fix removals on page
 			location.reload();
 		});
 
@@ -88,6 +103,39 @@ $(document).ready(function() {
 	}
 });
 
+//get video status if it exists and set correct icon
+function setCorrectIcon(){
+	var message ={};
+	message.requestType="vidStatus";
+	var iconInterval = setInterval(function(){
+		chrome.tabs.sendMessage(tabID,message, function(response){
+			if(response.vidStatus!==null){
+				//player is present
+				switch(response.vidStatus){
+					case 0:
+						break;
+					case 1:
+						$("#insert-icon").removeClass();
+						$("#insert-icon").addClass("icon-play");
+						break;
+					case 2:
+						$("#insert-icon").removeClass();
+						$("#insert-icon").addClass("icon-pause");
+						break;
+					case 3:
+						$("#insert-icon").removeClass();
+						$("#insert-icon").addClass("icon-spinner icon-spin");
+						break;
+				}
+			} else {
+				//video not present
+			}
+		});
+	},500);
+
+}
+
+//opens youtube if queue length is 0 and youtube not open
 function isYoutubeOpen(){
 	chrome.tabs.query({},function(tabs){
 		var b = false;

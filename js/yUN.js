@@ -198,8 +198,6 @@ function getInfo(flag){
 	return urlArr;
 }
 
-function getExpandedInfo(){
-}
 
 //function to redirect to next url
 function goToNext(){
@@ -253,6 +251,52 @@ function getYoutubePlayer(vidType){
 		}
 	}
 }
+function toggleHandler(sendResponse){
+	//get player object
+	var vidType = flashOrHtml();
+	var player = getYoutubePlayer(vidType);
+	if(player){
+		var state = player.getPlayerState();
+		if(state===1){
+			//its playing
+			player.pauseVideo();
+		} else if(state===2){
+			//its paused
+			player.playVideo();
+		} else {
+			alert("state: "+state);
+		}
+	}
+}
+
+function statusHandler(sendResponse){
+	//get player object
+	var vidType = flashOrHtml();
+	var player = getYoutubePlayer(vidType);
+	if(player){
+		var state = player.getPlayerState();
+		sendResponse({vidStatus:state});
+	} else {
+		sendResponse({vidStatus:null});
+	}
+}
+
+
+function messageListener(message,sender,sendResponse){
+	switch(message.requestType){
+		case 'toggle':
+			toggleHandler(sendResponse);
+			break;
+		case 'vidStatus':
+			statusHandler(sendResponse);
+			break;
+		default:
+			alert("error");
+			break;
+	}
+}
+
+chrome.runtime.onMessage.addListener(messageListener);
 
 var fullLeftPad = "304px";//304px
 var addedLeftPad= "347px";

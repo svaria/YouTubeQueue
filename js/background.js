@@ -65,7 +65,8 @@ function actionClicked(tab){
 
 function youtubeTabExited(tabId, removeInfo){
 	if(upNext.queue.length!==0 && upNext.tabID===tabId){
-		//youtube tab was closed, scan for another youtube and make that the primary, or set to null if no tab
+		//main youtube tab was closed, set to null
+		//no more current vid
 		upNext.tabID=null;
 		upNext.currentVid=-1;
 	}
@@ -115,7 +116,7 @@ function nextRequest(request){
 	}
 }
 
-function redirectRequest(request,sendResponse){
+function redirectRequest(request){
 	if(upNext.tabID!==null){
 		//tab still is open
 		chrome.tabs.update(upNext.tabID,{url:request.url,active:false});
@@ -146,12 +147,12 @@ function messageListener(request, sender, sendResponse){
 			nextRequest(request);
 			break;
 		case 'redirect':
-			redirectRequest(request,sendResponse);
+			redirectRequest(request);
 		case 'queue':
 			queueRequest(sendResponse);
 			break;
 		default:
-			alert("error");
+			alert("error1");
 			break;
 	}
 }

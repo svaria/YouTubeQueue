@@ -16,7 +16,7 @@ $(document).ready(function() {
 			var titleSpan = '<span class="vid-title">'+queue[i].vidTitle+'</span>';
 			var currentTitleSpan = '<span>'+queue[i].vidTitle+'</span>';
 			var deleteIconSpan = '</span><span class="delete"><i class="icon-remove"></i></span>';
-			//initialize loading to give time to calculate
+			//initialize with loading icon
 			var statusIconSpan = '<span class="exclude" id="status-icon"><i class="icon-spinner icon-spin" id="insert-icon"></i></span>';
 
 			//var metaTabId = '<meta name="tabID" content="'+queue[i].tabID+'">';
@@ -32,6 +32,7 @@ $(document).ready(function() {
 			}
 		}
 		
+		//make sure icon is always correct
 		setCorrectIcon();
 
 
@@ -131,14 +132,13 @@ function setCorrectIcon(){
 						$("#insert-icon").addClass("icon-spinner icon-spin");
 						break;
 				}
-			} else {
-				//video not present
 			}
 		});
 	},500);
 
 }
 
+//TODO make sure its ok to remove below
 //opens youtube if queue length is 0 and youtube not open
 function isYoutubeOpen(){
 	chrome.tabs.query({},function(tabs){

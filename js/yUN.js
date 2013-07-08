@@ -274,6 +274,7 @@ function statusHandler(sendResponse){
 	var vidType = flashOrHtml();
 	var player = getYoutubePlayer(vidType);
 	if(player){
+		console.log("player "+player);
 		var state = player.getPlayerState();
 		sendResponse({vidStatus:state});
 	} else {

@@ -132,6 +132,8 @@ function setCorrectIcon(){
 						$("#insert-icon").addClass("icon-spinner icon-spin");
 						break;
 				}
+			} else {
+				
 			}
 		});
 	},500);

@@ -16,7 +16,6 @@ body {
   color:#f03838;
 }
 
-
 #clear-button {
     position: absolute;
     right: 9px;
@@ -101,6 +100,10 @@ li a:hover {
   padding-top:3px;
   padding-right:2px;
   display:none;
+}
+
+#insert-icon:hover{
+  color: #f03838;
 }
 
 .delete:hover {

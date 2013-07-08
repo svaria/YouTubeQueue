@@ -2,6 +2,7 @@
 var queue = chrome.extension.getBackgroundPage().upNext.queue;
 var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
 var tabID= chrome.extension.getBackgroundPage().upNext.tabID;
+var inList = chrome.extension.getBackgroundPage().upNext.inList;
 //isYoutubeOpen();
 $(document).ready(function() {
 	//when ready, populate popup
@@ -9,7 +10,7 @@ $(document).ready(function() {
 		//at least 1 element in the queue, display it
 
 		//create list
-		$(".add-here").append('<ul class="queue"></ul>');
+		$(".add-here").append('<div><ul class="queue"></ul><div>');
 		//add elements from queue
 		for(var i =0; i<queue.length;i++){
 			//order: meta, title, delete, (play)
@@ -23,7 +24,7 @@ $(document).ready(function() {
 			var metaIndex = '<meta name="index" content="'+i+'">';
 			var meta  = metaIndex;
 
-			if(i===currentVid){
+			if(i===currentVid &&inList){
 				//$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
 				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+statusIconSpan+'</a></li>');
 			}else{
@@ -118,6 +119,12 @@ function setCorrectIcon(){
 				//player is present
 				switch(response.vidStatus){
 					case 0:
+						if(currentVid===queue.length-1){
+							//its the last vid in the queue and it has ended
+							$("#insert-icon").removeClass();
+							$("#insert-icon").addClass("icon-stop");
+							clearInterval(iconInterval);
+						}
 						break;
 					case 1:
 						$("#insert-icon").removeClass();
@@ -132,9 +139,7 @@ function setCorrectIcon(){
 						$("#insert-icon").addClass("icon-spinner icon-spin");
 						break;
 				}
-			} else {
-				
-			}
+			} 
 		});
 	},500);
 

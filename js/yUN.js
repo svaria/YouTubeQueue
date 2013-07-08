@@ -37,7 +37,6 @@ $(document).ready(function(){
 			inQueue[i].$a.parent(".video-list-item.related-list-item").children(".yUN-span").css({"left":addedLeftPad});		
 		}
 
-
 		$("#watch-more-related-button").click(function(){
 		//simulate wait time for load
 			setTimeout(function(){
@@ -62,8 +61,6 @@ $(document).ready(function(){
 					//adjust css of parent span
 					inQueue[i].$a.parent(".video-list-item.related-list-item").children(".yUN-span").css({"left":addedLeftPad});		
 				}
-
-				//$(".related-list-item:not(:has(.yUN-span))").append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
 
 				$(".yUN-span.yUN-more-suggestions").css({
 					"position":"absolute",
@@ -251,7 +248,9 @@ function getYoutubePlayer(vidType){
 		}
 	}
 }
-function toggleHandler(sendResponse){
+
+//pauses/plays the video
+function toggleHandler(){
 	//get player object
 	var vidType = flashOrHtml();
 	var player = getYoutubePlayer(vidType);
@@ -264,11 +263,12 @@ function toggleHandler(sendResponse){
 			//its paused
 			player.playVideo();
 		} else {
-			alert("state: "+state);
+			//do nothing
 		}
 	}
 }
 
+//returns the status of the player if it is on screen
 function statusHandler(sendResponse){
 	//get player object
 	var vidType = flashOrHtml();
@@ -282,14 +282,22 @@ function statusHandler(sendResponse){
 	}
 }
 
+//fixes button when element removed from queue from popup
+function removeHandler(){
+	
+}
+
 
 function messageListener(message,sender,sendResponse){
 	switch(message.requestType){
 		case 'toggle':
-			toggleHandler(sendResponse);
+			toggleHandler();
 			break;
 		case 'vidStatus':
 			statusHandler(sendResponse);
+			break;
+		case 'remove':
+			removeHandler();
 			break;
 		default:
 			alert("error");

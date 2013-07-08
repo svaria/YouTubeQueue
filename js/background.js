@@ -14,6 +14,7 @@ var upNext={}
 upNext.tabID=null;
 upNext.queue=[];
 upNext.currentVid=-1;
+upNext.inList= true;
 
 
 
@@ -63,6 +64,21 @@ function actionClicked(tab){
 	});
 }*/
 
+//maintains whether the current playing video is a video in the queue or not
+function updateListener(tabId, changeInfo,tab){
+	if(tabId===upNext.tabID && changeInfo.url!==undefined){
+		upNext.inList=false;
+		for(var i = 0;i<upNext.queue.length;i++){
+			if(changeInfo.url===upNext.queue[i].url){
+				upNext.inList=true;
+				break;
+			}
+		}
+		console.log(changeInfo.url);
+		console.log(upNext.inList);
+	}
+}
+
 function youtubeTabExited(tabId, removeInfo){
 	if(upNext.queue.length!==0 && upNext.tabID===tabId){
 		//main youtube tab was closed, set to null
@@ -108,7 +124,10 @@ function removeRequest(request){
 function nextRequest(request){
 	//non empty queue and also not last vid in queue
 	if(upNext.queue.length>0 && upNext.currentVid!==upNext.queue.length-1){
-		upNext.currentVid++;
+		if(upNext.inList){
+			//only increment the counter if the video that ended was in the list
+			upNext.currentVid++;
+		}
 		chrome.tabs.update(upNext.tabID,{url:upNext.queue[upNext.currentVid].url});
 	}
 }
@@ -159,6 +178,7 @@ function messageListener(request, sender, sendResponse){
 //does not work
 		chrome.tabs.onActivated.addListener(updatePageActionInTab);*/
 
+chrome.tabs.onUpdated.addListener(updateListener);
 chrome.runtime.onMessage.addListener(messageListener);
 //chrome.browserAction.onClicked.addListener(actionClicked);
 chrome.tabs.onRemoved.addListener(youtubeTabExited);

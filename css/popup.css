@@ -41,45 +41,6 @@ body {
     background-color:#e4685d;
 }
 
-h2 {
-  font: 400 18px/1.5 Helvetica, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  width: 100;
-}
- 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
- 
-li {
-  font: 200 12px/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
-}
- 
-li:last-child {
-  border: none;
-}
-
-.current {
-  font-weight: bold;
-}
-
-li a {
-  text-decoration: none;
-  color: #000;
-  display: block;
-  width: 500;
- 
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
-
 .vid-title:hover {
   color:#f03838;
 }
@@ -109,3 +70,51 @@ li a:hover {
 .delete:hover {
   color: #f03838;
 }
+
+.current {
+  font-weight: bold;
+}
+
+
+/*NEW CSS LIST*/
+
+
+
+/*OLD CSS LIST*/
+h2 {
+  font: 400 18px/1.5 Helvetica, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100;
+}
+ 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ 
+li {
+  font: 200 12px/1.5 Helvetica, Verdana, sans-serif;
+  border-bottom: 1px solid #ccc;
+}
+ 
+li:last-child {
+  border: none;
+}
+
+
+
+li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 500;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+

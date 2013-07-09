@@ -18,7 +18,6 @@ $(document).ready(function() {
 			var currentTitleSpan = '<span>'+queue[i].vidTitle+'</span>';
 			var deleteIconSpan = '<span class="delete"><i class="icon-remove"></i></span></span>';
 			var barIconSpan= '<span class="bar"></span>';
-			//var barIconSpan= '<span class="bar"><i class="icon-ellipsis-vertical"></i></span>';
 			//initialize with loading icon
 			var statusIconSpan = '<span class="exclude" id="status-icon"><i class="icon-spinner icon-spin" id="insert-icon"></i></span>';
 
@@ -27,10 +26,8 @@ $(document).ready(function() {
 			var meta  = metaIndex;
 
 			if(i===currentVid &&inList){
-				//$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
 				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+barIconSpan+statusIconSpan+'</a></li>');
 			}else{
-				//$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+'<span class="vid-title">'+queue[i].vidTitle+'</span><span class="delete"><i class="icon-remove"></i></span></a></li>');
 				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+deleteIconSpan+barIconSpan+'</a></li>');
 			}
 		}
@@ -52,7 +49,6 @@ $(document).ready(function() {
 			$l = $(this).parents(".enqueued");
 			var url = $(this).parents("a").attr('href');
 			var vidTitle = $(this).siblings(".vid-title").html();
-			//var tabID = $(this).siblings("meta[name=tabID]").attr("content");
 			//remove video from queue
 			var message={};
 			message.requestType="remove";

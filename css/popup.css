@@ -49,7 +49,7 @@ body {
 
 .exclude {
   padding-top: 3px;
-  padding-right: 2px;
+  padding-right: 10px;
   float: right;
 }
 
@@ -57,16 +57,33 @@ body {
   float:right;
   padding-top:3px;
   padding-right:2px;
+  padding-left: 6px;
   display:none;
+}
+
+.delete:hover {
+  color: #f03838;
+}
+
+.bar {
+  float:right;
+  background-color: #777;
+  width: 0px;
+  padding-top:2px;
+  padding-right: 2px;
+  height:16px;
+  display:none;
+}
+
+.bar:hover{
+  cursor:default;
 }
 
 #insert-icon:hover{
   color: #f03838;
 }
 
-.delete:hover {
-  color: #f03838;
-}
+
 
 .current {
   font-weight: bold;

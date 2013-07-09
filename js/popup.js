@@ -13,10 +13,12 @@ $(document).ready(function() {
 		$(".add-here").append('<div><ul class="queue"></ul><div>');
 		//add elements from queue
 		for(var i =0; i<queue.length;i++){
-			//order: meta, title, delete, (play)
+			//order: meta, title, delete, bar, (play)
 			var titleSpan = '<span class="vid-title">'+queue[i].vidTitle+'</span>';
 			var currentTitleSpan = '<span>'+queue[i].vidTitle+'</span>';
-			var deleteIconSpan = '</span><span class="delete"><i class="icon-remove"></i></span>';
+			var deleteIconSpan = '<span class="delete"><i class="icon-remove"></i></span></span>';
+			var barIconSpan= '<span class="bar"></span>';
+			//var barIconSpan= '<span class="bar"><i class="icon-ellipsis-vertical"></i></span>';
 			//initialize with loading icon
 			var statusIconSpan = '<span class="exclude" id="status-icon"><i class="icon-spinner icon-spin" id="insert-icon"></i></span>';
 
@@ -26,10 +28,10 @@ $(document).ready(function() {
 
 			if(i===currentVid &&inList){
 				//$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+queue[i].vidTitle+'<span class="delete"><i class="icon-remove"></i></span><span class="exclude"><i class="icon-play"></i></span></a></li>');
-				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+statusIconSpan+'</a></li>');
+				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+barIconSpan+statusIconSpan+'</a></li>');
 			}else{
 				//$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+'<span class="vid-title">'+queue[i].vidTitle+'</span><span class="delete"><i class="icon-remove"></i></span></a></li>');
-				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+deleteIconSpan+'</a></li>');
+				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+deleteIconSpan+barIconSpan+'</a></li>');
 			}
 		}
 		
@@ -40,6 +42,8 @@ $(document).ready(function() {
 		//in addition to css changes, also add capability to remove link
 		$(".enqueued").hover(function(){
 			var $i= $(this).find(".delete");
+			var $bar = $(this).find(".bar");
+			$bar.toggle();
 			$i.toggle();
 		});
 

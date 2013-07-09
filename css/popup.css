@@ -93,7 +93,10 @@ body {
 /*NEW CSS LIST*/
 h2 {
   font-family: Helvetica, sans-serif;
-  color: #4E4E4E;
+  font-weight: normal;
+  letter-spacing: -1px;
+  font-size:22px;
+  color: #000;/*#4E4E4E*/
   margin: 0;
   padding: 0;
 }

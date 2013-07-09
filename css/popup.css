@@ -20,26 +20,27 @@ body {
 #clear-button {
     position: absolute;
     right: 9px;
-    top:5px;
-    background-color:#fc8d83;
+    top:13px;
+    background-color:#690000;
     
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border-radius:4px;
     
-    border:1px solid #d83526;
+    border:1px solid #9E2607;
     
     display:inline-block;
     color:#ffffff;
-    font-family:arial;
+    font-family: "Open Sans", "Segoe UI", Arial, sans-serif;
     font-size:13px;
     font-weight:bold;
-    padding:6px 15px;
+    padding:4px 20px 20px;
+    height:27px;
     text-decoration:none;
     
 }
 #clear-button:hover {
-    background-color:#e4685d;
+    background-color:#BD5252;
 }
 
 .vid-title:hover {
@@ -51,11 +52,6 @@ body {
   padding-right: 2px;
   float: right;
 }
- 
-/*li a:hover {
-  font-size: 14px;
-  background: #f6f6f6;
-}*/
 
 .delete {
   float:right;
@@ -79,10 +75,10 @@ body {
 
 /*NEW CSS LIST*/
 h2 {
-  font: 400 18px/1.5 Helvetica, Verdana, sans-serif;
+  font-family: Helvetica, sans-serif;
+  color: #4E4E4E;
   margin: 0;
   padding: 0;
-  width: 100;
 }
 
 ul {
@@ -118,10 +114,10 @@ li:before {
   position: absolute;
   left:0; bottom:0; top:0;
   width: 10px;
-  background: #7F8C9A;
+  background: #BD5252;/*#9A7F7F*/
 }
 li:nth-child(even):before {
-  background: #34495E;
+  background: #690000;
 }
 li + li {
   border-top: 2px solid #ededed;
@@ -141,44 +137,3 @@ li a {
   font-family: "Open Sans", "Segoe UI", Arial, sans-serif;
   color: #777;
 }
-
-
-/*OLD CSS LIST*/
-/*
-h2 {
-  font: 400 18px/1.5 Helvetica, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  width: 100;
-}
- 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
- 
-li {
-  font: 200 12px/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
-}
- 
-li:last-child {
-  border: none;
-}
-
-
-
-li a {
-  text-decoration: none;
-  color: #000;
-  display: block;
-  width: 500;
- 
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
-*/

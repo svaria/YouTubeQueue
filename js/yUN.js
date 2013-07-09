@@ -254,16 +254,25 @@ function toggleHandler(){
 	//get player object
 	var vidType = flashOrHtml();
 	var player = getYoutubePlayer(vidType);
-	if(player){
-		var state = player.getPlayerState();
-		if(state===1){
-			//its playing
-			player.pauseVideo();
-		} else if(state===2){
-			//its paused
-			player.playVideo();
+	if(vidType==='flash'){
+		if(player){
+			var state = player.getPlayerState();
+			if(state===1){
+				//its playing
+				player.pauseVideo();
+			} else if(state===2){
+				//its paused
+				player.playVideo();
+			} else {
+				//do nothing
+			}
+		}
+	} else {
+		//html5 player
+		if(player.paused){
+			player.play();
 		} else {
-			//do nothing
+			player.pause();
 		}
 	}
 }
@@ -273,12 +282,25 @@ function statusHandler(sendResponse){
 	//get player object
 	var vidType = flashOrHtml();
 	var player = getYoutubePlayer(vidType);
-	if(player){
-		console.log("player "+player);
-		var state = player.getPlayerState();
-		sendResponse({vidStatus:state});
+	if(vidType==="flash"){
+		if(player){
+			console.log("player "+player);
+			var state = player.getPlayerState();
+			sendResponse({vidStatus:state});
+		} else {
+			sendResponse({vidStatus:null});
+		}
 	} else {
-		sendResponse({vidStatus:null});
+		//html5 player
+		if(player){
+			if(player.paused){
+				sendResponse({vidStatus:2});
+			} else {
+				sendResponse({vidStatus:1});
+			}
+		} else {
+			sendResponse({vidStatus:null});
+		}
 	}
 }
 

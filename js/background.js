@@ -67,15 +67,22 @@ function actionClicked(tab){
 //maintains whether the current playing video is a video in the queue or not
 function updateListener(tabId, changeInfo,tab){
 	if(tabId===upNext.tabID && changeInfo.url!==undefined){
-		upNext.inList=false;
-		for(var i = 0;i<upNext.queue.length;i++){
-			if(changeInfo.url===upNext.queue[i].url){
-				upNext.inList=true;
-				break;
+		if(changeInfo.url.indexOf("youtube.com")!==-1){
+			//the page has moved to another youtube page
+			upNext.inList=false;
+			for(var i = 0;i<upNext.queue.length;i++){
+				if(changeInfo.url===upNext.queue[i].url){
+					upNext.inList=true;
+					break;
+				}
 			}
+			console.log(changeInfo.url);
+			console.log(upNext.inList);
+		} else {
+			//page has moved to third party page, do not maintain tracking
+			console.log("moved");
+			upNext.tabID=null;
 		}
-		console.log(changeInfo.url);
-		console.log(upNext.inList);
 	}
 }
 
@@ -139,7 +146,7 @@ function redirectRequest(request){
 	} else {
 		//tab was closed
 		chrome.tabs.create({url:request.url,active:false}, function(tab){
-			//update tabID with above callback
+			//update tabID
 			upNext.tabID=tab.id;
 		});
 	}

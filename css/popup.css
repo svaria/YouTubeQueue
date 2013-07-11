@@ -43,14 +43,27 @@ body {
     background-color:#690000;
 }
 
+.title-container {
+  display: block;
+  max-width: 425px;
+}
+
 .vid-title:hover {
   color:#f03838;
 }
 
-.exclude {
+.status {
   padding-top: 3px;
-  padding-right: 10px;
+  padding-right: 9px;
   float: right;
+}
+
+.icon-container {
+  position: absolute;
+  width:75px;
+  right:15px;
+  top: 12px;
+
 }
 
 .delete {

@@ -14,21 +14,24 @@ $(document).ready(function() {
 		//add elements from queue
 		for(var i =0; i<queue.length;i++){
 			//order: meta, title, delete, bar, (play)
-			var titleSpan = '<span class="vid-title">'+queue[i].vidTitle+'</span>';
-			var currentTitleSpan = '<span>'+queue[i].vidTitle+'</span>';
-			var deleteIconSpan = '<span class="delete"><i class="icon-remove"></i></span></span>';
+			var titleSpan = '<span class="vid-title title-container">'+queue[i].vidTitle+'</span>';
+			var currentTitleSpan = '<span class="title-container">'+queue[i].vidTitle+'</span>';
+			var deleteIconSpan = '<span class="delete"><i class="icon-remove"></i></span>';
 			var barIconSpan= '<span class="bar"></span>';
 			//initialize with loading icon
-			var statusIconSpan = '<span class="exclude" id="status-icon"><i class="icon-spinner icon-spin" id="insert-icon"></i></span>';
+			var statusIconSpan = '<span class="status" id="status-icon"><i class="icon-spinner icon-spin" id="insert-icon"></i></span>';
+
+			var iconSpan = '<span class="icon-container">'+deleteIconSpan+barIconSpan+'</span>';
+			var currentIconSpan = '<span class="icon-container">'+deleteIconSpan+barIconSpan+statusIconSpan+'</span>';
 
 			//var metaTabId = '<meta name="tabID" content="'+queue[i].tabID+'">';
 			var metaIndex = '<meta name="index" content="'+i+'">';
 			var meta  = metaIndex;
 
 			if(i===currentVid &&inList){
-				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+deleteIconSpan+barIconSpan+statusIconSpan+'</a></li>');
+				$("ul").append('<li class="enqueued current" ><a href="'+queue[i].url+'">'+meta+currentTitleSpan+currentIconSpan+'</a></li>');
 			}else{
-				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+deleteIconSpan+barIconSpan+'</a></li>');
+				$("ul").append('<li class="enqueued"><a href="'+queue[i].url+'">'+meta+titleSpan+iconSpan+'</a></li>');
 			}
 		}
 		
@@ -115,7 +118,7 @@ function setCorrectIcon(){
 	message.requestType="vidStatus";
 	var iconInterval = setInterval(function(){
 		chrome.tabs.sendMessage(tabID,message, function(response){
-			if(response.vidStatus!==null){
+			if(response.vidStatus!==null ||response.vidStatus!==undefined){
 				//player is present
 				switch(response.vidStatus){
 					case 0:
@@ -137,6 +140,8 @@ function setCorrectIcon(){
 					case 3:
 						$("#insert-icon").removeClass();
 						$("#insert-icon").addClass("icon-spinner icon-spin");
+						break;
+					default:
 						break;
 				}
 			} 

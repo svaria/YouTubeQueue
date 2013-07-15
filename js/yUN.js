@@ -82,42 +82,6 @@ $(document).ready(function(){
 	//add state listener
 	stateListener();
 
-	function stateListener(){
-		//get player object
-		var vidType = flashOrHtml();
-		var player = getYoutubePlayer(vidType);
-		console.log(player);
-		if(vidType==="flash"){
-			if(player){
-				var inter1 = setInterval(function(){
-					try{
-						var state = player.getPlayerState();
-						if(state===0){
-							//movie has ended
-							console.log("movie ended");
-							clearInterval(inter1);
-							//logic for next page
-							goToNext();		
-						}
-					} catch (error) {
-						console.log(error);
-					}
-				},1500);
-			}
-		} else {
-			//html5 player
-			var inter2 = setInterval(function(){
-				if(player.ended===true){
-					//movie has ended
-					console.log("movie ended html");
-					clearInterval(inter2);
-					//logic for next page
-					goToNext();
-				}
-			},1500);
-		}
-	}
-
 	function clickHandler(){
 		//add logic for when button clicked
 		//if it has not been added to queue then add
@@ -169,11 +133,44 @@ $(document).ready(function(){
 			$(this).parent(".yUN-span").css({"left":addedLeftPad});
 		}
 	}
-
-
 });
 
-//function messageListener(request, sender, sendResponse){}
+
+function stateListener(){
+	//get player object
+	var vidType = flashOrHtml();
+	var player = getYoutubePlayer(vidType);
+	console.log(player);
+	if(vidType==="flash"){
+		if(player){
+			var inter1 = setInterval(function(){
+				try{
+					var state = player.getPlayerState();
+					if(state===0){
+						//movie has ended
+						console.log("movie ended");
+						clearInterval(inter1);
+						//logic for next page
+						goToNext();		
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},1500);
+		}
+	} else {
+		//html5 player
+		var inter2 = setInterval(function(){
+			if(player.ended===true){
+				//movie has ended
+				console.log("movie ended html");
+				clearInterval(inter2);
+				//logic for next page
+				goToNext();
+			}
+		},1500);
+	}
+}
 
 //get intial urls
 function getInfo(flag){

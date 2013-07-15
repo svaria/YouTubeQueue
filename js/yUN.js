@@ -337,3 +337,4 @@ var fullLeftPad = "304px";//304px
 var addedLeftPad= "347px";
 var removeLeftPad= "338px";
 var bottomPad= "4px";
+

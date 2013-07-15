@@ -105,7 +105,7 @@ $(document).ready(function() {
 			var message = {};
 			message.requestType="remove";
 			for(var i = 0;i<queue.length;i++){
-				//loop through queue and remove all vids
+				//loop through queue and restore buttons on page
 				message.url = queue[i].url.substring(queue[i].url.lastIndexOf("/"));
 				chrome.tabs.sendMessage(tabID,message);
 			}
@@ -157,6 +157,6 @@ function setCorrectIcon(){
 				}
 			} 
 		});
-	},500);
+	},1000);
 
 }

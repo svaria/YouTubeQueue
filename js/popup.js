@@ -3,7 +3,7 @@ var queue = chrome.extension.getBackgroundPage().upNext.queue;
 var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
 var tabID= chrome.extension.getBackgroundPage().upNext.tabID;
 var inList = chrome.extension.getBackgroundPage().upNext.inList;
-//isYoutubeOpen();
+
 $(document).ready(function() {
 	//when ready, populate popup
 	if(queue.length!==0){
@@ -148,21 +148,4 @@ function setCorrectIcon(){
 		});
 	},500);
 
-}
-
-//TODO make sure its ok to remove below
-//opens youtube if queue length is 0 and youtube not open
-function isYoutubeOpen(){
-	chrome.tabs.query({},function(tabs){
-		var b = false;
-		for(var i = 0; i<tabs.length;i++){
-			if(tabs[i].url.indexOf("youtube.com")!==-1){
-				b= true;
-				break;
-			}
-		}
-		if(!b && queue.length===0){
-			chrome.tabs.create({active:true,url:"http://www.youtube.com"});
-		}	
-	});
 }

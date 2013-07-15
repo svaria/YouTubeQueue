@@ -73,6 +73,8 @@ function updateListener(tabId, changeInfo,tab){
 			for(var i = 0;i<upNext.queue.length;i++){
 				if(changeInfo.url===upNext.queue[i].url){
 					upNext.inList=true;
+					//if the user redirects from page instead of popup, update current vid
+					upNext.currentVid=i;
 					break;
 				}
 			}

@@ -301,8 +301,16 @@ function statusHandler(sendResponse){
 }
 
 //fixes button when element removed from queue from popup
-function removeHandler(){
-	
+function removeHandler(message){
+	var $a = $(".watch-sidebar-body").find('a[href="'+message.url+'"]');
+	var $b = $a.siblings(".yUN-span").children(".yUN-btn");
+
+	//change UI back to unadded
+	$b.html("Add To Up Next");
+	$b.parent(".yUN-span").css({"left":fullLeftPad});
+	$b.css({"border-color":"#d8d8d8"});
+	$b.removeClass("hover-highlight-remove");
+	$b.addClass("not-added");
 }
 
 
@@ -315,7 +323,7 @@ function messageListener(message,sender,sendResponse){
 			statusHandler(sendResponse);
 			break;
 		case 'remove':
-			removeHandler();
+			removeHandler(message);
 			break;
 		default:
 			alert("error");

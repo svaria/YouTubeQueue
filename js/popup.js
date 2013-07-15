@@ -1,8 +1,10 @@
 
-var queue = chrome.extension.getBackgroundPage().upNext.queue;
-var currentVid = chrome.extension.getBackgroundPage().upNext.currentVid;
-var tabID= chrome.extension.getBackgroundPage().upNext.tabID;
-var inList = chrome.extension.getBackgroundPage().upNext.inList;
+var upNext = chrome.extension.getBackgroundPage().upNext;
+
+var queue =upNext.queue;
+var currentVid = upNext.currentVid;
+var tabID= upNext.tabID;
+var inList = upNext.inList;
 
 $(document).ready(function() {
 	//when ready, populate popup
@@ -69,8 +71,9 @@ $(document).ready(function() {
 
 			}
 
-			//TODO - fix removals on page
-
+			//reuse old message but change url to just last part
+			message.url = message.url.substring(message.url.lastIndexOf("/"));
+			chrome.tabs.sendMessage(tabID,message);
 
 			//refresh page
 			location.reload();
@@ -98,7 +101,15 @@ $(document).ready(function() {
 		$("#clear-button").click(function(){
 			chrome.extension.getBackgroundPage().upNext.queue=[];
 			chrome.extension.getBackgroundPage().upNext.currentVid=-1;
-			//TODO - fix removals on page
+			
+			var message = {};
+			message.requestType="remove";
+			for(var i = 0;i<queue.length;i++){
+				//loop through queue and remove all vids
+				message.url = queue[i].url.substring(queue[i].url.lastIndexOf("/"));
+				chrome.tabs.sendMessage(tabID,message);
+			}
+
 			location.reload();
 		});
 

@@ -133,7 +133,9 @@ function setCorrectIcon(){
 				//player is present
 				switch(response.vidStatus){
 					case 0:
-						if(currentVid===queue.length-1){
+						if(currentVid===queue.length){
+							//not queue.length-1 because counter is incremented to account for
+							//potential addition of new videos 
 							//its the last vid in the queue and it has ended
 							$("#insert-icon").removeClass();
 							$("#insert-icon").addClass("icon-stop");

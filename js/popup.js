@@ -38,7 +38,10 @@ $(document).ready(function() {
 		}
 		
 		//make sure icon is always correct
-		setCorrectIcon();
+		//iff the tabID is not null
+		if(tabID!==null){
+			setCorrectIcon();
+		}
 
 
 		//in addition to css changes, also add capability to remove link
@@ -73,7 +76,10 @@ $(document).ready(function() {
 
 			//reuse old message but change url to just last part
 			message.url = message.url.substring(message.url.lastIndexOf("/"));
-			chrome.tabs.sendMessage(tabID,message);
+			if(tabID!==null){
+				//only send if tab still exists
+				chrome.tabs.sendMessage(tabID,message);
+			}
 
 			//refresh page
 			location.reload();
@@ -102,12 +108,15 @@ $(document).ready(function() {
 			chrome.extension.getBackgroundPage().upNext.queue=[];
 			chrome.extension.getBackgroundPage().upNext.currentVid=-1;
 			
-			var message = {};
-			message.requestType="remove";
-			for(var i = 0;i<queue.length;i++){
-				//loop through queue and restore buttons on page
-				message.url = queue[i].url.substring(queue[i].url.lastIndexOf("/"));
-				chrome.tabs.sendMessage(tabID,message);
+			if(tabID!==null){
+				//only send if tab still exists
+				var message = {};
+				message.requestType="remove";
+				for(var i = 0;i<queue.length;i++){
+					//loop through queue and restore buttons on page
+					message.url = queue[i].url.substring(queue[i].url.lastIndexOf("/"));
+					chrome.tabs.sendMessage(tabID,message);
+				}
 			}
 
 			location.reload();

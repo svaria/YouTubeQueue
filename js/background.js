@@ -100,8 +100,8 @@ function youtubeTabExited(tabId, removeInfo){
 //handles add request
 function addRequest(request,sender){
 	//add it in this case
-	if(upNext.queue.length===0 ||upNext.tabID===null){
-		//either no vids or old vid tab closed
+	if(upNext.queue.length===0 ||upNext.tabID===null || upNext.tabID!==sender.tab.id){
+		//either no vids or old vid tab closed or vid tab changed
 		upNext.tabID=sender.tab.id;
 	} 
 	var toEnq = new YUNVid(request.vidTitle,request.url);

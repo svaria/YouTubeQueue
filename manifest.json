@@ -1,6 +1,6 @@
 {
 	"name": "Youtube Up-Next",
-	"version": "0.8",
+	"version": "0.8.1",
 	"description": "adds Up-Next capabilities",
 	"content_scripts":[
 		{

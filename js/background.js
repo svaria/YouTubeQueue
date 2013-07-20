@@ -78,11 +78,8 @@ function updateListener(tabId, changeInfo,tab){
 					break;
 				}
 			}
-			console.log(changeInfo.url);
-			console.log(upNext.inList);
 		} else {
 			//page has moved to third party page, do not maintain tracking
-			console.log("moved");
 			upNext.tabID=null;
 		}
 	}

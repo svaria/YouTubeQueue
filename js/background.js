@@ -135,12 +135,11 @@ function nextRequest(request){
 			upNext.currentVid++;
 		}
 		chrome.tabs.update(upNext.tabID,{url:upNext.queue[upNext.currentVid].url});
-	}
-	if(upNext.currentVid===upNext.queue.length-1){
+	} else if(upNext.currentVid===upNext.queue.length-1){
 		//just increment the counter to maintain correct behavior
 		//so if video added, will go to correct last location
 		upNext.currentVid++;
-	}
+	} else {}
 }
 
 function redirectRequest(request){

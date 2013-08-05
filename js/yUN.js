@@ -26,7 +26,7 @@ $(document).ready(function(){
 		//addbutton to only those which are true videos and are not in the queue
 		for(var i=0;i<notInQueue.length;i++){
 			notInQueue[i].$a.parent(".video-list-item.related-list-item")
-						.append('<span class="yUN-span"><button class="yUN-btn not-added normal-btn">Add To Up Next</button></span>');
+						.append('<span class="yUN-span"><button class="yUN-btn not-added normal-btn">Add To Queue</button></span>');
 		}
 
 		//show added button to those already in the queue
@@ -51,7 +51,7 @@ $(document).ready(function(){
 				//addbutton to only those which are true videos and are not in the queue
 				for(var i=0;i<notInQueue.length;i++){
 					notInQueue[i].$a.parent(".video-list-item.related-list-item")
-								.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To Up Next</button></span>');
+								.append('<span class="yUN-span yUN-more-suggestions"><button class="yUN-btn not-added normal-btn yUN-more-suggestions">Add To queue</button></span>');
 				}
 
 				//show added button to those already in the queue
@@ -103,7 +103,7 @@ $(document).ready(function(){
 			sendAddRemoveRequest(this,"remove");
 
 			//UI Changes
-			$(this).html("Add To Up Next");
+			$(this).html("Add To Queue");
 			$(this).parent(".yUN-span").css({"left":fullLeftPad});
 			$(this).css({"border-color":"#d8d8d8"});
 			$(this).removeClass("hover-highlight-remove");
@@ -306,7 +306,7 @@ function removeHandler(message){
 	var $b = $a.siblings(".yUN-span").children(".yUN-btn");
 
 	//change UI back to unadded
-	$b.html("Add To Up Next");
+	$b.html("Add To Queue");
 	$b.parent(".yUN-span").css({"left":fullLeftPad});
 	$b.css({"border-color":"#d8d8d8"});
 	$b.removeClass("hover-highlight-remove");
@@ -333,8 +333,8 @@ function messageListener(message,sender,sendResponse){
 
 chrome.runtime.onMessage.addListener(messageListener);
 
-var fullLeftPad = "304px";//304px
-var addedLeftPad= "347px";
-var removeLeftPad= "338px";
+var fullLeftPad = "279px";//304px
+var addedLeftPad= "315px";
+var removeLeftPad= "305px";
 var bottomPad= "4px";
 

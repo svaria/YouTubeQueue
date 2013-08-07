@@ -1,4 +1,7 @@
-$(document).ready(function(){
+var originalURL = window.location.search;
+console.log(originalURL);
+
+function pageLoaded(){
 	//add necessary css classes to DOM NO WHITESPACE ALLOWED
 	$("head").append('<style id="yUN-btn-css" type="text/css">.normal-btn{font-size:10px;color:#888;padding:0 3px;height:18px;border-color:#d8d8d8;-webkit-border-radius: 2px;border-radius:2px;border-width:1px;border-style:solid;font-weight:bold;white-space:nowrap;word-wrap: normal;vertical-align: middle;cursor: pointer;font-family:arial,sans-serif;margin:0;background-image:linear-gradient(to bottom,#fff 0,#fbfbfb 100%);}</style>');
 	$("head").append('<style id="yUN-highlight" type="text/css">.hover-highlight{-webkit-box-shadow:#999 0px 0px 3px;background:#F3F3F3 -webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#EBEBEB));background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(white), to(#EBEBEB));border-color:#999;outline:0px;}</style>');
@@ -133,7 +136,33 @@ $(document).ready(function(){
 			$(this).parent(".yUN-span").css({"left":addedLeftPad});
 		}
 	}
-});
+}
+
+
+
+
+$(document).ready(pageLoaded);
+youtubeInnerChangeListener();
+
+var changed =false;
+function youtubeInnerChangeListener(){
+	var urlChangeInter = setInterval(function(){
+		if(window.location.search!==originalURL){
+			originalURL=window.location.search;
+			changed=true;
+			//don't execute immediately, wait till page loads again
+			setTimeout(pageLoaded,5000);
+		}
+	},1000);
+	/*var loadInter = setInterval(function(){
+		if(!$.contains(document.documentElement, document.getElementById("progress"))){
+					console.log("inside");
+					pageLoaded();
+					clearInterval(loadInter);
+				}
+			},1000);*/
+}
+
 
 
 function stateListener(){
@@ -154,6 +183,8 @@ function stateListener(){
 						goToNext();		
 					}
 				} catch (error) {
+					//fall through for when video changes and old interval still there
+					clearInterval(inter1);
 					console.log(error);
 				}
 			},1500);
@@ -161,13 +192,18 @@ function stateListener(){
 	} else {
 		//html5 player
 		var inter2 = setInterval(function(){
-			if(player.ended===true){
-				//movie has ended
-				console.log("movie ended html");
+			try {
+				if(player.ended===true){
+					//movie has ended
+					console.log("movie ended html");
+					clearInterval(inter2);
+					//logic for next page
+					goToNext();
+				} 
+			} catch (error2) {
 				clearInterval(inter2);
-				//logic for next page
-				goToNext();
-			}
+				console.log(error2);
+			}  
 		},1500);
 	}
 }

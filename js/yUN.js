@@ -192,18 +192,17 @@ function stateListener(){
 	} else {
 		//html5 player
 		var inter2 = setInterval(function(){
-			try {
 				if(player.ended===true){
 					//movie has ended
 					console.log("movie ended html");
 					clearInterval(inter2);
 					//logic for next page
 					goToNext();
+				}
+				if(player.videoHeight===0){
+					//fall throguh for when video changes and old interval still there
+					clearInterval(inter2);
 				} 
-			} catch (error2) {
-				clearInterval(inter2);
-				console.log(error2);
-			}  
 		},1500);
 	}
 }

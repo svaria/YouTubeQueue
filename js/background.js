@@ -16,54 +16,6 @@ upNext.queue=[];
 upNext.currentVid=-1;
 upNext.inList= true;
 
-
-
-/*function checkforYoutubeURL(tabID,changeInfo,tab){
-	//show if on youtube
-	if(tab.url.indexOf("youtube.com")!==-1){
-		chrome.pageAction.show(tabID);
-
-	}
-	if(upNext.queue.length!==0){
-		chrome.pageAction.show(tabID);
-	}else {
-		if(tab.url.indexOf("youtube.com")===-1)
-			chrome.pageAction.hide(tabID);
-	}
-
-};*/
-
-/*function updatePageActionInTab(activeInfo){
-	//show on activation of tab
-	chrome.tabs.get(activeInfo.tabId,function(tab){
-		if(tab.url.indexOf("youtube.com")!==-1){
-			chrome.pageAction.show(tab.id);
-		} else {
-			if(upNext.queue.length===0)
-				chrome.pageAction.hide(tab.id);
-		}
-		if(upNext.queue.length!==0){
-			chrome.pageAction.show(tab.id);
-		}
-	});
-}
-
-function actionClicked(tab){
-	chrome.windows.getCurrent({populate:true},function(win){
-		var t = win.tabs;
-		var b = false;
-		for(var i = 0; i<t.length;i++){
-			b= b || (t[i].url.indexOf("youtube.com")!==-1);
-		}
-		alert(b);
-		if(b){
-			chrome.browserAction.setPopup({'popup':'popup.html'});
-		} else {
-			chrome.browserAction.setPopup({'popup':'popup-no-yt.html'});
-		}
-	});
-}*/
-
 //maintains whether the current playing video is a video in the queue or not
 function updateListener(tabId, changeInfo,tab){
 	if(tabId===upNext.tabID && changeInfo.url!==undefined){
@@ -182,11 +134,6 @@ function messageListener(request, sender, sendResponse){
 			break;
 	}
 }
-
-//listeners
-/*chrome.tabs.onUpdated.addListener(checkforYoutubeURL);
-//does not work
-		chrome.tabs.onActivated.addListener(updatePageActionInTab);*/
 
 chrome.tabs.onUpdated.addListener(updateListener);
 chrome.runtime.onMessage.addListener(messageListener);
